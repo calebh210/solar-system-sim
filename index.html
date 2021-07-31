@@ -1,17 +1,36 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title>Caleb's Site</title>
-  </head>
-  <body>
 
-<h1>Marky is a sussy baka!</h1>
+<head>
+  <link rel="stylesheet" href="login.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <meta charset="utf-8">
+  <title>Caleb's Site</title>
+</head>
 
-<img src="https://i.scdn.co/image/ab67616d0000b2735100b121e9848f88c9b0f53c" alt="Sussy Baka">
+<body class="bg-dark">
+  <main>
+    <h1 id="login-header" class="row justify-content-center">Enter Password</h1>
 
-<h1> Lorcan is an UwU Senpai </h1>
+    <div id="login-error-msg-holder">
+      <p id="login-error-msg"> Incorrect Password</p>
+    </div>
 
-<img src="https://i.pinimg.com/originals/15/7f/a3/157fa34d175e330404c2bb70cae9e921.png" alt="dino">
-  </body>
+    <form id='login-Form'>
+      <div class="form-group  row justify-content-center">
+        <div class="col-6">
+          <input type="password" class="form-control" id="password" aria-describedby="pass" placeholder="Enter Password">
+          <small id="passwordDescript" class="form-text text-muted">Guess the super-secret password to unlock secrets.</small>
+          <div class="col text-center">
+              <input type="submit" value="Submit" id="submit-Button">
+          </div>
+        </div>
+      </div>
+    </form>
+  </main>
+</body>
+
+
+<script type="text/javascript" src="login.js"></script>
+
 </html>
