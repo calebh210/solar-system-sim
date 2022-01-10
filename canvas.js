@@ -38,6 +38,7 @@ document.addEventListener('DOMContentLoaded', function(event) {
     function startScene(cube) {
         var canvas = document.getElementById('canvas');
         render = new THREE.WebGLRenderer({ alpha: true });
+        render.setPixelRatio( window.devicePixelRatio );
 
         render.setClearColor(0x000000, 0);
 
@@ -60,11 +61,19 @@ document.addEventListener('DOMContentLoaded', function(event) {
     }
 
     function renderScene() {
-        render.render(scene, camera);
-        render.setPixelRatio( window.devicePixelRatio );
+
+        // function renderUpdate(){
+
+          // update();
+          render.render(scene, camera);
+
+        // };
+
+        // renderUpdate();
+
     }
 
-    var cube = createCube();
+    cube = createCube();
     startScene(cube);
     animateScene();
     renderScene();
