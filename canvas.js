@@ -6,16 +6,21 @@ document.addEventListener('DOMContentLoaded', function(event) {
     function animateScene() {
         requestAnimationFrame(animateScene);
 
-        // cube.rotation.y += 0.02;
-        // cube.rotation.x += 0.01;
+        cube.rotation.y += 0.01;
+         // cube.rotation.x += 0.01;
 
         renderScene();
     }
 
     function createCube() {
+
+        var loader = new THREE.TextureLoader();
+        var image1 = loader.load( 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/LinkedIn_logo_initials.png/768px-LinkedIn_logo_initials.png' );
+        var image2 = loader.load( 'https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png' );
+
         var cubeMaterials = [
-            new THREE.MeshBasicMaterial({color:0x2173fd}),
-            new THREE.MeshBasicMaterial({color:0xd5d918}),
+            new THREE.MeshBasicMaterial({map: image1 }),
+            new THREE.MeshBasicMaterial({map: image2 }),
             new THREE.MeshBasicMaterial({color:0xd2dbeb}),
             new THREE.MeshBasicMaterial({color:0xa3a3c6}),
             new THREE.MeshBasicMaterial({color:0xfe6b9f}),
@@ -32,9 +37,9 @@ document.addEventListener('DOMContentLoaded', function(event) {
 
     function startScene(cube) {
         var canvas = document.getElementById('canvas');
-        render = new THREE.WebGLRenderer();
+        render = new THREE.WebGLRenderer({ alpha: true });
 
-        render.setClearColor(0x000000, 1);
+        render.setClearColor(0x000000, 0);
 
         var canvasWidth = canvas.getAttribute('width');
         var canvasHeight = canvas.getAttribute('height');
@@ -56,6 +61,7 @@ document.addEventListener('DOMContentLoaded', function(event) {
 
     function renderScene() {
         render.render(scene, camera);
+        render.setPixelRatio( window.devicePixelRatio );
     }
 
     var cube = createCube();
