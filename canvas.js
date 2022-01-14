@@ -17,13 +17,14 @@ document.addEventListener('DOMContentLoaded', function(event) {
         var loader = new THREE.TextureLoader();
         var image1 = loader.load( 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/LinkedIn_logo_initials.png/768px-LinkedIn_logo_initials.png' );
         var image2 = loader.load( 'https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png' );
+        var image3 = loader.load( 'https://t3.ftcdn.net/jpg/03/77/85/04/360_F_377850455_Gk0rRBzegH6YX9SZK9YbgyYyLwrVb9zi.jpg' );
 
         var cubeMaterials = [
-            new THREE.MeshBasicMaterial({map: image1 }),
+            new THREE.MeshBasicMaterial({map: image3 }),
             new THREE.MeshBasicMaterial({map: image2 }),
-            new THREE.MeshBasicMaterial({color:0xd2dbeb}),
-            new THREE.MeshBasicMaterial({color:0xa3a3c6}),
-            new THREE.MeshBasicMaterial({color:0xfe6b9f}),
+            new THREE.MeshBasicMaterial({map: image3 }),
+            new THREE.MeshBasicMaterial({map: image3 }),
+            new THREE.MeshBasicMaterial({map: image1 }),
             new THREE.MeshDepthMaterial({color:0x856af9})
         ];
 
