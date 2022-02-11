@@ -12,3 +12,24 @@
    /* metade transparente: alpha = .5 */
    background-color: rgba(255, 255, 255, .5) !important;
 }
+
+#myCarousel img {
+
+width: auto;
+
+height: 720px;
+
+max-height: 720px;
+
+}
+
+#navbar{
+  padding: 5px;
+  border: 10px;
+}
+
+#wrapper {
+                width: 80%;
+                margin: 0 auto;
+                text-align: center;
+            }

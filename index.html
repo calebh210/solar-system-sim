@@ -1,77 +1,67 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-
+<!DOCTYPE HTML>
+<html>
 <head>
-  <meta charset="utf-8">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 <link rel="stylesheet" href="index.css">
-  <title>Homepage</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="shortcut icon" href="Images/favicon-16x16.png" type="image/x-icon" />
+<title>Homepage</title>
 
-  <style>
-     .navbar-nav {
-       flex-direction: row;
-     }
+<style>
+  .navbar-nav {
+    flex-direction: row;
+  }
 
-     .nav-link {
-       padding-right: .5rem !important;
-       padding-left: .5rem !important;
-     }
+  .nav-link {
+    padding-right: .5rem !important;
+    padding-left: .5rem !important;
+  }
 
-     /* Fixes dropdown menus placed on the right side */
-     .ml-auto .dropdown-menu {
-       left: auto !important;
-       right: 0px;
-     }
-   </style>
-
+  /* Fixes dropdown menus placed on the right side */
+  .ml-auto .dropdown-menu {
+    left: auto !important;
+    right: 0px;
+  }
+</style>
 </head>
-
 <body class="bg-image" style="
   background-image: url('https://wallpaperaccess.com/full/487824.jpg');
   height: 100vh; ">
 
-  <div class="container wrapper">
-    <div class="row justify-content-center">
-      <h1 id="title-text"> <i> calebharmon.net </i></h1>
+    <nav class="navbar navbar-expand-lg rounded bg-dark m-3">
+      <a class="navbar-brand" href="index.html" id="title-text"><i>calebharmon.net</i></a>
+      <ul class="navbar-nav mr-auto" id="title-text">
+
+        <li class="nav-item">
+          <a class="nav-link disabled mx-2" id="title-text" href="login.html"> Login <a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link disabled mx-2" id="title-text" href="videos.html"> Videos <a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link disabled mx-2" id="title-text" href="videos.html"> Games <a>
+        </li>
+
+        <li class="nav-item">
+
+
+        </li>
+      </ul>
+    </nav>
+
+    <div class="row d-flex align-items-center justify-content-center">
+
+          <div id="canvas" width="600" height="600"></div>
+
     </div>
-  </div>
-  <nav>
 
-
-    <nav class="navbar navbar-expand-lg rounded">
-    <a class="navbar-brand" href="#" id = "title-text"><i>About</i></a>
-    <!-- <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link">Left Link 1</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link">Left Link 2</a>
-      </li>
-    </ul> -->
-    <ul class="navbar-nav ml-auto" id = "title-text">
-      <li class="nav-item dropdown" >
-        <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
-          Site Options</a>
-        <div class="dropdown-menu" id = "title-text" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="login.html">Login</a>
-          <a class="dropdown-item" href="videos.html">Videos</a>
-          <a class="dropdown-item" href="games.html">Games</a>
-        </div>
-      </li>
-    </ul>
-
-
-
-
-  <main>
-
-
-
-
-  </main>
-</body>
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-
+    </body>
+    <script src="three.min.js"></script>
+    <script src="canvas.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 </html>
