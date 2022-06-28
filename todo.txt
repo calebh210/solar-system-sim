@@ -1,0 +1,2 @@
+1. Clean up homepage (Index.html)
+2. Look into two.js for simple 2D game/graphics
