@@ -19,12 +19,34 @@ a *{
     background-repeat: no-repeat;
 }
 
-#skills
+/* #skills
 {
   text-decoration: underline;
   text-decoration-color: cyan;
   text-underline-offset: 5px;
+} */
+
+#portfolio1
+{
+  background-image: url('Images/gradient1.jpg');
+  border-radius: 25px;
+  padding: 20px;
 }
+
+#portfolio2
+{
+  background-image: url('Images/gradient2.jpg');
+  border-radius: 25px;
+  padding: 20px;
+}
+
+#portfolio3
+{
+  background-image: url('Images/gradient3.jpg');
+  border-radius: 25px;
+  padding: 20px;
+}
+
 
 /* li::before {content: "•"; color: red;
   display: inline-block; width: 1em;
