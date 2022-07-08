@@ -1,6 +1,7 @@
 html *
 {
     font-family: 'Roboto', sans-serif;
+    scroll-behavior: smooth;
 }
 
 a *{
@@ -47,6 +48,30 @@ a *{
   padding: 20px;
 }
 
+ul {
+  list-style-type: square;
+}
+
+#langbullet:before {
+    content: "◼";
+    color: cyan;
+    display: inline-block; 
+    width: 1em;
+}
+
+#libbullet:before {
+  content: "◼";
+  color: green;
+  display: inline-block; 
+  width: 1em;
+}
+
+#miscbullet:before {
+  content: "◼";
+  color: rebeccapurple;
+  display: inline-block; 
+  width: 1em;
+}
 
 /* li::before {content: "•"; color: red;
   display: inline-block; width: 1em;
