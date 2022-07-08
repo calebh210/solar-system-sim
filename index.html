@@ -1,67 +1,203 @@
-<!DOCTYPE HTML>
-<html>
-<head>
-<meta charset="utf-8">
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-<link rel="stylesheet" href="index.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-<link rel="shortcut icon" href="Images/favicon-16x16.png" type="image/x-icon" />
-<title>Homepage</title>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta charset="utf-8">
+    <script src="https://kit.fontawesome.com/84a612beee.js" crossorigin="anonymous"></script>
+    <title>Caleb Harmon</title>
+    <link rel="shortcut icon" href="Images/favicon-16x16.png" type="image/x-icon" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="calebnet.css">
+  </head>
 
-<style>
-  .navbar-nav {
-    flex-direction: row;
-  }
+<main>
+    <div id = "header"> 
+        <!--NAVBAR-->
+        <nav>
+            <ul class = "nav justify-content-center ">
 
-  .nav-link {
-    padding-right: .5rem !important;
-    padding-left: .5rem !important;
-  }
+                  <li class="nav-item active ">
+                    <a class="nav-link " href="#portfolio"><strong>Portfolio</strong></a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link active" href="https://docs.google.com/document/d/1Ie9K4pJWu5wdee4Lpsn4ZJazaGdw0SCGFCMDCjWoXMI/edit?usp=sharing"><strong>Resume</strong></a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link active " href="https://github.com/calebh210"><strong>Github</strong></a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link active" href=#contact><strong>Contact</strong></a>
+                  </li>
+            </ul>
+        </nav>  
 
-  /* Fixes dropdown menus placed on the right side */
-  .ml-auto .dropdown-menu {
-    left: auto !important;
-    right: 0px;
-  }
-</style>
-</head>
-<body class="bg-image" style="
-  background-image: url('https://wallpaperaccess.com/full/487824.jpg');
-  height: 100vh; ">
+        <div class = "container">
+            <div class = "row justify-content-center">
+                <div class = "col-lg-6 p-3 text-center">
+                    <h1 class = "text-white">Welcome!</h1>
+                </div>
+            </div>
+           
 
-    <nav class="navbar navbar-expand-lg rounded bg-dark m-3">
-      <a class="navbar-brand" href="index.html" id="title-text"><i>calebharmon.net</i></a>
-      <ul class="navbar-nav mr-auto" id="title-text">
+            <div class = "row justify-content-center">
+              <div class="card" style="width: 40rem;">
+                <div class="card-body">
+                  <div class = "card-title text-center p-2"> <h3> I'm Caleb Harmon </h3> </div>
+                    <p class = "card-text text-center p-2">Currently a Computing Science student at the <a href="https://www.dundee.ac.uk/">University of Dundee</a> </p>
+                    <p class = "card-text text-center p-2">With my interest in Cybersecurity and Offensive Security, I'm currently working towards obtaining my <a href="https://www.offensive-security.com/pwk-oscp/">Offensive Security Certified Professional</a>
+                    certificate.
+                    <p class = "card-text text-center p-2"> This page serves as my online resume and portfolio, and is constantly being updated. Please have a look around!
+                    </p>
+                  </div>
+                    
+              </div>
+            </div>
+        </div>
 
-        <li class="nav-item">
-          <a class="nav-link disabled mx-2" id="title-text" href="login.html"> Login <a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link disabled mx-2" id="title-text" href="videos.html"> Videos <a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link disabled mx-2" id="title-text" href="games.html"> Games <a>
-        </li>
-
-        <li class="nav-item">
+                <!--Skills&Knowledge Page-->
+        <div class = "container">
+            <div class = " p-5 row justify-content-md-center">
+              <h2 id = "skills">Skills and Knowledge</h2>
+            </div>
 
 
-        </li>
-      </ul>
-    </nav>
+            <div class = "row justify-content-center p-3">
+             <h5><strong>Languages</strong></h5>              
+            </div>
+           
+                <ul class="row list-group-horizontal list-group-flush justify-content-center " style="list-style-type: square;">
+                  <li id ="langbullet" class="list-group-item border-0">C/C++</li>
+                  <li id ="langbullet" class="list-group-item border-0">Java</li>
+                  <li id ="langbullet" class="list-group-item border-0">Javascript</li>
+                  <li id ="langbullet" class="list-group-item border-0">HTML</li>
+                  <li id ="langbullet" class="list-group-item border-0">CSS</li>
+                  <li id ="langbullet" class="list-group-item border-0">C#</li>
+                  <li id ="langbullet" class="list-group-item border-0">SQL</li>
+                </ul>
+            
+            <div class = " row justify-content-center p-3">
+              <h5><strong>Libraries and Frameworks</strong></h5>
+            </div>
 
-    <div class="row d-flex align-items-center justify-content-center">
+              <ul class="row list-group-horizontal justify-content-center " style="list-style-type: square;">
+                <li id ="libbullet" class="list-group-item border-0">React</li>
+                <li id ="libbullet" class="list-group-item border-0">Vue</li>
+                <li id ="libbullet" class="list-group-item border-0">Bootstrap</li>
+                <li id ="libbullet" class="list-group-item border-0">NodeJS</li>
+                <li id ="libbullet" class="list-group-item border-0">TwoJS</li>
+                <li id ="libbullet" class="list-group-item border-0">ThreeJS</li>
+              </ul>
+            
+            <div class = " row justify-content-center p-3">
+              <h5><strong>Miscellaneous</strong></h5>
+            </div>
+              <ul class="row list-group-horizontal justify-content-center " style="list-style-type: square;">
+                <li id = "miscbullet" class="list-group-item border-0">Git</li>
+                <li id = "miscbullet" class="list-group-item border-0">Amazon Web Services (AWS)</li>
+                <li id = "miscbullet" class="list-group-item border-0">TypeScript</li>
+                <li id = "miscbullet" class="list-group-item border-0">Bash</li>
+                <li id = "miscbullet" class="list-group-item border-0">Unix</li>
+                </ul>
+                <ul class="row list-group-horizontal justify-content-center " style="list-style-type: square;">
+                <li id = "miscbullet" class="list-group-item border-0">Unified Modeling Language (UML)</li>
+                <li id = "miscbullet" class="list-group-item border-0">Basic AI Searches</li>
+                <li id = "miscbullet" class="list-group-item border-0">Adobe</li>
+               
+              </ul>
+        </div>
+            
 
-          <div id="canvas" width="600" height="600"></div>
+                <!-- START OF PORTFOLIO SECTION-->
+                <div class = "container">
+                  <h2 id = "portfolio" class ="text-center p-3"> Portfolio</h2>
 
+                  <!--PORTFOLIO ITEM 1-->
+                  <div id = "portfolio1" class = "row m-3 p-3">
+                    
+                    <div class = "col-lg-6 justify-content-center text-center">
+                      <!-- <img class = "p-3 portgif1" src = "Images/ATMPorftolio.gif"> </img>  -->
+                      <video class = "p-5" width="550" height="608" controls autoplay loop> 
+                        <source src="Images/ATMPortfolio.mp4" type="video/mp4">
+                      </video>
+                    </div>
+                    <div class = "col-lg-6">
+                      <h2 class = " mt-5 text-white text-center">ATM Simulator</h2>
+                        <p class ="p-3 mt-3 text-white">A working ATM Network simulator created with C# .NET Windows Forms in Visual Studio. The goal of the project was to create
+                          a network which maintains concurrency between machines using semaphores. 
+                        </p>
+                        <p class ="p-3 mt-3 text-white"> The project was created for an assignment in Computing System 2B: Architecture and Operating Systems</p>
+                        <p class ="p-3 mt-3 text-white"> The github repository for this project can be found <a href = "https://github.com/calebh210/ATMAssignment">here</a></p>
+                    </div>
+                  </div>
+
+                    <!--PORTFOLIO ITEM 2-->
+                  <div id = "portfolio2" class = "row m-3 p-3">
+                    
+                    <div class = "col-lg-6 justify-content-center text-center">
+                      <video class = "p-5" width="550" height="608" controls autoplay loop> 
+                        <source src="Images/PlacesPortfolio.mp4" type="video/mp4">
+                      </video>
+                      <caption><i class = "text-white text-center">Please open the video in fullscreen for proper resolution</i></caption>
+                    </div>
+                    <div class = "col-lg-6">
+                      <h2 class = " mt-5 text-white text-center">Places Near Me</h2>
+                      <p class ="p-3 mt-3 text-white">An API integrated web app which shows a user points of interest near them on a map once they enter their location. When a point of interest in selected,
+                        a description of the location and a picture of the location is presented on the page. 
+                      </p>
+                      <p class ="p-3 mt-3 text-white"> The project was created for an assignment in Web Authoring. This was a group project, and my main contributions were creating the User Interface, and interfacing the Google Maps API</p>
+                      <p class ="p-3 mt-3 text-white"> The github repository for this project can be found <a href = "https://github.com/UniversityOfDundee-Computing/AC11002-api-mashup-group-d">here</a></p>
+                      <p class ="p-3 mt-3 text-white"> The github pages website for this project itself can be found here <a href = "https://universityofdundee-computing.github.io/AC11002-api-mashup-group-d/">here</a></p>
+                    </div>
+                  </div>
+
+                    <!--PORTFOLIO ITEM 3-->
+                  <div id = "portfolio3" class = "row m-3 p-3">
+                    
+                    <div class = "col-lg-6">
+                        <!-- <h6>Test</h6> -->
+                        <img class ="p-5 portgif3 text-center vertical-center" src = "https://i2-prod.manchestereveningnews.co.uk/incoming/article14822235.ece/ALTERNATES/s1200d/Manchester-Baby.jpg"> </img> 
+                    </div>
+                    <div class = "col-lg-6">
+                      <h2 class = " mt-5 text-white text-center">Manchester Baby Simulator</h2>
+                      <p class ="p-3 mt-3 text-white">A simulator of the Manchester Baby, the first electronic-stored program computer. The simulator was written in C++, and features 10 basic instructions, which can be used to solve arithmetic problems.
+                      </p>
+                      <p class ="p-3 mt-3 text-white"> The project was created for an assignment in Computing Systems 2A: Architecture Fundamentals and Unix.</p>
+                      <p class ="p-3 mt-3 text-white"> The github repository for this project can be found <a href = "https://github.com/calebh210/babysimulator">here</a></p>
+                    </div>
+                  </div>
+                </div>
+
+            <div class = " p-3 row justify-content-center">
+              <h2 id = "contact"><u>Contact</u></h2>
+            </div>
+            <ul class="row list-group-horizontal justify-content-center " style="list-style-type: square;">
+              <li class="list-group-item border-0"><i class="fa-solid fa-envelope"></i><a href="mailto:me@calebharmon.net"> me@calebharmon.net</a></li>
+              <li class="list-group-item border-0"><i class="fa-brands fa-linkedin"></i><a href="https://www.linkedin.com/in/caleb-harmon-a7b830244/"> Caleb Harmon</a></li>
+              <li class="list-group-item border-0"> <i class="fa-brands fa-github"></i> <a href ="https://github.com/calebh210"> calebmh210</a></li>
+              
+            </ul>
+          
+           
+          
+
+
+
+        </div>
+
+
+
+
+       
+        
     </div>
+</main>
 
-    </body>
-    <script src="three.min.js"></script>
-    <script src="canvas.js"></script>
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
 </html>

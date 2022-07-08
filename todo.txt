@@ -1,2 +1,6 @@
-1. Clean up homepage (Index.html)
-2. Look into two.js for simple 2D game/graphics
+Pick better background
+Pick cleaner font
+Add colored bullet points
+Add portfolio
+Add hyperlinks to contact page and navbar
+Carousel for skills
