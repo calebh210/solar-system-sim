@@ -1,0 +1,66 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="proto.css">
+        <style>
+            body {
+                margin: 0;
+            }
+            canvas {
+                width: 100%;
+                height: 100%;
+            }
+        </style>
+    </head>
+
+    <body>       
+
+        <div id="mySidenav" class="sidenav">
+            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+
+            <label for="rotation">Set Earth Rotation Speed</label>
+            <input type = "number" step = "0.0001" id = "rotation">
+
+            <button type="button" id = "topDownButton" onclick="module.topDown()">View Top-Down</button>
+
+          </div>
+          
+          <!-- Use any element to open the sidenav -->
+          <span onclick=openNav()> Open Controls </span>    
+          
+        <script>
+
+            
+        //NAVBAR CONTROLS
+
+        /* Set the width of the side navigation to 250px and the left margin of the page content to 250px */
+        function openNav() {
+            document.getElementById("mySidenav").style.width = "250px";
+            
+        }
+  
+        /* Set the width of the side navigation to 0 and the left margin of the page content to 0 */
+        function closeNav() {
+            document.getElementById("mySidenav").style.width = "0";
+            
+        }
+        const module = {};
+        </script>
+         
+        <script type = "module">
+            import { topDown } from '/proto.js';
+            module.topDown = topDown;
+        </script>
+
+        <script type = "module" src="proto.js" async defer></script>
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.148.0/three.js" integrity="sha512-QCgI2hwwzXcsan5cX/GfunvcXL5J2inb1k/k0foYk67GvF0u3IgMHa7YU+RDBKInlYqy7uHOhBhMKHOA6uEkcQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
+    </body>
+
+
+
+
+</html>
