@@ -90,8 +90,8 @@ venus.position.x = realSunR + 108940.000;
 sun.add( venus );
 
 //camera 
-camera.position.z = 100;
-camera.position.y = 100;
+camera.position.z = 15000;
+camera.position.y = 15000;
 //takes x,y,z args, points camera at that location
 //camera.lookAt(sun.position);
 
