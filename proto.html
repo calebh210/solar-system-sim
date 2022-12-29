@@ -5,6 +5,7 @@
         <title></title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <link rel="stylesheet" href="proto.css">
         <style>
             body {
@@ -22,10 +23,17 @@
         <div id="mySidenav" class="sidenav">
             <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
 
-            <label for="rotation">Set Earth Rotation Speed</label>
+            <label id = "label" for="rotation">Set Earth Rotation Speed</label>
             <input type = "number" step = "0.0001" id = "rotation">
 
             <button type="button" id = "topDownButton" onclick="module.topDown()">View Top-Down</button>
+
+            <button type="button" id = "viewEarthButton" onclick="">View Earth</button>
+
+            <div class="custom-control custom-switch m-2">
+                <input type="checkbox" class="custom-control-input" id="customSwitch">
+                <label class="custom-control-label" for="customSwitch">Real Sizes?</label>
+              </div>
 
           </div>
           
@@ -48,16 +56,22 @@
             document.getElementById("mySidenav").style.width = "0";
             
         }
+
         const module = {};
         </script>
          
         <script type = "module">
             import { topDown } from '/proto.js';
+            // import { viewEarth } from '/proto.js';
             module.topDown = topDown;
+            // module.viewEarth = viewEarth;
         </script>
 
         <script type = "module" src="proto.js" async defer></script>
         <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.148.0/three.js" integrity="sha512-QCgI2hwwzXcsan5cX/GfunvcXL5J2inb1k/k0foYk67GvF0u3IgMHa7YU+RDBKInlYqy7uHOhBhMKHOA6uEkcQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     </body>
 
 
