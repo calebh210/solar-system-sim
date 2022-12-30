@@ -28,7 +28,17 @@
 
             <button type="button" id = "topDownButton" onclick="module.topDown()">View Top-Down</button>
 
-            <button type="button" id = "viewEarthButton" onclick="">View Earth</button>
+            <!-- <button type="button" id = "viewEarthButton" onclick="">View Earth</button> -->
+
+            <div class="dropdown">
+                <button class="btn btn-outline-dark dropdown-toggle" type="button" data-toggle="dropdown">Select Planet to View
+                <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                  <li><a href="#" id = "viewMercuryButton">Mercury </a></li>
+                  <li><a href="#" id = "viewVenusButton">Venus </a></li>
+                  <li><a href="#" id = "viewEarthButton">Earth </a></li>
+                </ul>
+              </div>
 
             <div class="custom-control custom-switch m-2">
                 <input type="checkbox" class="custom-control-input" id="customSwitch">

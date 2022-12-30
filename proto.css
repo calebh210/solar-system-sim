@@ -44,6 +44,6 @@
 
   html, body{overflow:hidden;}
 
-#topDownButton, #viewEarthButton, #rotation, #label {
+#topDownButton, #rotation, #label {
     margin: 10px;
 }

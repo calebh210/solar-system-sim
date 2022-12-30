@@ -1,6 +1,7 @@
-Pick better background
-Pick cleaner font
-Add colored bullet points
-Add portfolio
-Add hyperlinks to contact page and navbar
-Carousel for skills
+Add rest of planets + some moons
+Add planet orbits
+Make the "Real Size" slider work
+Add ability to jump camera to any planet
+Give planet own orbital period
+Add ability to speed up time
+Unjank camera controls
