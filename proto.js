@@ -2,6 +2,7 @@
 import * as THREE from "https://cdnjs.cloudflare.com/ajax/libs/three.js/0.148.0/three.module.js";
 import { OrbitControls } from 'https://unpkg.com/three@0.127.0/examples/jsm/controls/OrbitControls.js';
 
+
 let scene, camera, renderer, earth, moon, sun, sunGrav, controls, mercury, venus;
 
 function init(){
@@ -69,6 +70,9 @@ const earthOrbit = new THREE.EllipseCurve(
 	false,            // aClockwise
 	0                 // aRotation
 );
+
+earth.rotation.x = Math.PI / 2;
+
 //drawing Earth's orbit
 const earthPoints = earthOrbit.getPoints( 500 );
 const EarthOrbitGeometry = new THREE.BufferGeometry().setFromPoints( earthPoints );
@@ -97,6 +101,7 @@ const moonPoints = moonOrbit.getPoints( 50 );
 const MoonOrbitGeometry = new THREE.BufferGeometry().setFromPoints( moonPoints );
 // const orbmaterial = new THREE.LineBasicMaterial( { color: 0x0d0dd1 } );
 const moonOrbitLine = new THREE.Line( MoonOrbitGeometry, orbmaterial );
+moonOrbitLine.rotation.x = Math.PI / 2;
 earth.add( moonOrbitLine );
 
 
@@ -144,6 +149,7 @@ const venusPoints = venusOrbit.getPoints( 50 );
 const VenusOrbitGeometry = new THREE.BufferGeometry().setFromPoints( venusPoints );
 // const orbmaterial = new THREE.LineBasicMaterial( { color: 0x0d0dd1 } );
 const VenusOrbitLine = new THREE.Line( VenusOrbitGeometry, orbmaterial );
+VenusOrbitLine.opacity = 0.5;
 scene.add( VenusOrbitLine );
 
 //camera 
@@ -163,16 +169,12 @@ function animate(){
     requestAnimationFrame(animate);
 
     //Change the rotation speed of the earth
-    let controlSpeed = document.getElementById('rotation').value;
-    if(controlSpeed != ""){
-        earth.rotation.z += parseFloat(controlSpeed);
-    }else{
-        earth.rotation.z += 0.0005;
-    } 
+  
+    earth.rotation.y += 0.0005;
     //set Moon's rotation
     moon.rotation.z += 0.001;
-    sun.rotation.z += 0.0001;
-    sunGrav.rotation.z += 0.0005;
+    // sun.rotation.z += 0.0001;
+    // sunGrav.rotation.z += 0.0005;
     controls.update();
     //camera.lookAt(0,0,0);
 
