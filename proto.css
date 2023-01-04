@@ -201,8 +201,9 @@
   cursor: pointer;
 }
 
-#speedLabel{
+#speedLabel, #speedDisplay{
   color:gray;
   margin-left: 15px;
   font-family: "JetBrains Mono",monospace;
 }
+

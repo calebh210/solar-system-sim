@@ -42,12 +42,12 @@
                 <label class="custom-control-label" for="customSwitch" id="switchLabel">Real Sizes?</label>
               </div>
 
-            <button class="ml-3 mt-3 button-menu" type="button" onclick="module.topDown()">View Top-Down</button>
+            <button class="ml-3 mt-3 button-menu" type="button" style="width: 80%;" onclick="module.topDown() ">View Top-Down</button>
 
             <!-- <button type="button" id = "viewEarthButton" onclick="">View Earth</button> -->
 
             <div class="ml-3 mt-2 dropdown">
-                <button class="button-menu btn-sm btn-light dropdown-toggle" style="width: 80%;" type="button" data-toggle="dropdown">  <span class="caret"> Select Planet to View </span></button>
+                <button class="button-menu btn-sm btn-light dropdown-toggle" style="width: 85%;" type="button" data-toggle="dropdown">  <span class="caret"> Select Planet to View </span></button>
                 <ul class="dropdown-menu">
                   <li><a href="#" id = "viewMercuryButton">Mercury </a></li>
                   <li><a href="#" id = "viewVenusButton">Venus </a></li>
@@ -64,10 +64,11 @@
             <div class="slidecontainer">
                 <span id = "speedLabel">Select Speed</span>
                 <input type="range" min="1" max="100" value="50" class="slider" id="speedRange">
+                <span id = "speedDisplay">Speed = </span>
             </div>
 
             <div class="flyButton">
-               <button class="button-menu ml-3 mt-3" style="width: 80%;" type ="button" >Fly Spaceship</button>
+               <button class="button-menu ml-3 mt-2 mb-2" style="width: 80%;" type ="button" >Fly Spaceship</button>
             </div>
               
             
@@ -92,9 +93,16 @@
             }
             
         }
-        
 
-    
+        var speed = document.getElementById('speedRange');
+        var speedDisplay = document.getElementById('speedDisplay')
+        var display = "C";
+        
+        speedDisplay.innerText = "Speed = " + speed.value;
+
+        speed.oninput = function() {
+            speedDisplay.innerText = "Speed = " + this.value;
+        }
 
         const module = {};
         </script>
