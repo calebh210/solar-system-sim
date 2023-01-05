@@ -44,7 +44,7 @@ moonR = displayMoonR;
 venusR = displayVenusR;
 
 //the sun
-
+// TODO: maybe change all these Geometry methods into a single class
 const geometrySun = new THREE.SphereGeometry( realSunR*10, 32, 15 );
 const textureSun = new THREE.TextureLoader().load("Textures/Sun.jpg")
 const materialSun = new THREE.MeshBasicMaterial( {map: textureSun} );
@@ -178,7 +178,6 @@ function animate(){
     controls.update();
     //camera.lookAt(0,0,0);
 
-
     renderer.render(scene, camera);
     
     
@@ -243,6 +242,121 @@ viewVenus.addEventListener("click", function()
     camera.lookAt(vector);
   
 });
+
+
+
+// START OF STARSHIP SECTION //
+//TODO -- ADJUST CAMERA TO BE LESS JANKY -- MAKE CONTROLS BETTER (SMOOTHER) AND DIRECTIONAL
+
+let playerShip;
+
+document.getElementById('flyShip').addEventListener("click", function()
+{
+    if(!playerShip){
+        playerShip = new starShip(new THREE.Vector3(10000.0, 10000.0, 10000.0),true);
+        playerShip.createStarship();
+        const cameraOffset = new THREE.Vector3(250.0, 250.0, 250.0);
+        const objectPosition = new THREE.Vector3();
+        camera.position.set(playerShip.positionVector.x,playerShip.positionVector.y,playerShip.positionVector.z).add(cameraOffset);
+        camera.lookAt(10000,10000,10000);
+        // controls.target = playerShip.positionVector;
+        console.log(camera.position);
+
+        if(playerShip.isActive == true){
+            document.addEventListener("keydown", function(e){
+            playerShip.move(e.key);
+            
+            });
+            }
+ 
+    }else if(playerShip.isActive == true){
+        playerShip.removeStarship();
+    }else{
+        playerShip.addStarship();
+    }
+    // objectPosition.setFromMatrixPosition( playerShip.ship.matrixWorld );
+    // camera.position.copy(objectPosition).add(cameraOffset);
+
+});
+
+
+//Class containing starship properties
+class starShip {
+    
+    
+
+    constructor(positionVector,isActive) {
+        this.positionVector = positionVector;
+        this.isActive = isActive;
+        this.ship;
+    }
+
+
+    createStarship(){
+        const starShipGeometry = new THREE.SphereGeometry(15,32,16);
+        //Commented out until I actually have a texture to load
+        // const starShipTexture = new THREE.TextureLoader().load() 
+        const starShipMaterial = new THREE.MeshBasicMaterial( { color: 0x0000ff } );
+        this.ship = new THREE.Mesh(starShipGeometry, starShipMaterial);
+        this.ship.position.set(this.positionVector.x, this.positionVector.y,this.positionVector.z);
+        this.addStarship();
+       
+       
+    }
+
+    addStarship(){
+        //add the ship object to the canvas
+        scene.add( this.ship );
+        //focus controls to the ship (allow user to use orbit controls around the ship)
+        controls.target = this.ship.position;
+        console.log("ship added")
+        this.isActive = true;
+    }
+
+    removeStarship(){
+        scene.remove( this.ship );
+        this.isActive = false;
+    }
+
+
+    move(key){
+        switch(key){
+            case 'w':
+                this.ship.position.x +=5;
+                break;
+            case 'a':
+
+            case 's':
+                this.ship.position.x -=5;
+                break;
+            case 'd':
+
+            case 'q':
+
+            case 'e':
+            
+        }
+    }
+
+    //Creating the camera for the ship -- switch from orbit cam to perspective -- might not need this
+    createShipCamera(){
+
+        let shipCamera = new THREE.PerspectiveCamera(
+            70,
+            window.innerWidth / window.innerHeight,
+            0.01,
+            1000
+        );
+    }
+    
+}
+
+//Controls for the starship
+
+    
+
+
+
 
 init();
 animate();
