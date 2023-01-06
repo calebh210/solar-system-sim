@@ -51,17 +51,13 @@ const materialSun = new THREE.MeshBasicMaterial( {map: textureSun} );
 sun = new THREE.Mesh( geometrySun, materialSun );
 scene.add( sun );
 
-const sunGravGeo = new THREE.SphereGeometry(1,1,1);
-sunGrav = new THREE.Mesh( sunGravGeo, materialSun );
-scene.add( sunGrav);
-
 //the earth
 const geometry = new THREE.SphereGeometry( earthR, 64, 32 );
 const texture = new THREE.TextureLoader().load("Textures/Earth-Clear.jpg")
 const material = new THREE.MeshBasicMaterial( {map: texture} );
 earth = new THREE.Mesh( geometry, material );
 earth.position.z = realSunR + AU
-sun.add( earth );
+scene.add( earth );
 
 const earthOrbit = new THREE.EllipseCurve(
 	0,  0,            // ax, aY
@@ -138,7 +134,7 @@ const materialVen = new THREE.MeshBasicMaterial( {map: textureVen} );
 venus = new THREE.Mesh( geometryVen, materialVen );
 //108 940 000km 
 venus.position.z = realSunR + 108940.000;
-sun.add( venus );
+scene.add( venus );
 
 const venusOrbit = new THREE.EllipseCurve(
 	0,  0,            // ax, aY
@@ -147,7 +143,7 @@ const venusOrbit = new THREE.EllipseCurve(
 	false,            // aClockwise
 	0                 // aRotation
 );
-const venusPoints = venusOrbit.getPoints( 50 );
+const venusPoints = venusOrbit.getPoints( 100 );
 const VenusOrbitGeometry = new THREE.BufferGeometry().setFromPoints( venusPoints );
 // const orbmaterial = new THREE.LineBasicMaterial( { color: 0x0d0dd1 } );
 const VenusOrbitLine = new THREE.Line( VenusOrbitGeometry, orbmaterial );
@@ -168,6 +164,9 @@ controls.dampingFactor = 0.05;
 
 }
 
+let angleM = 0;
+let angleV = 0;
+let angleE = 0;
 function animate(){
     requestAnimationFrame(animate);
 
@@ -175,12 +174,30 @@ function animate(){
   
     earth.rotation.y += 0.0005;
     //set Moon's rotation
-    moon.rotation.z += 0.001;
+    moon.rotation.y += 0.001;
     // sun.rotation.z += 0.0001;
     // sunGrav.rotation.z += 0.0005;
     controls.update();
     //camera.lookAt(0,0,0);
 
+    //this controls the orbital movement of mercury
+    angleM += 0.001;
+    mercury.position.z = 696.340 + 70000.000 * (Math.sin(angleM)) - 10000;
+    mercury.position.x = 696.340 + 47000.000 * (Math.cos(angleM));
+    mercury.updateMatrix();
+
+    //this controls the orbital movement of Venus
+    angleV += 0.0005;
+    venus.position.z = 696.340 + 108940 * (Math.sin(angleV));
+    venus.position.x = 696.340 + 108940 * (Math.cos(angleV));
+    venus.updateMatrix();
+
+    //this controls the orbital movement of the Earth
+    angleE += 0.0001;
+    earth.position.z = 696.340 + 150000.000 * (Math.sin(angleE));
+    earth.position.x = 696.340 + 150000.000 * (Math.cos(angleE));
+    earth.updateMatrix();
+  
     renderer.render(scene, camera);
     
     
@@ -207,14 +224,11 @@ export function topDown(){
 let viewEarth = document.getElementById('viewEarthButton');
 viewEarth.addEventListener("click", function()
 {   
-    var vector = new THREE.Vector3();
-    vector.setFromMatrixPosition( earth.matrixWorld );
-
-    camera.position.x = vector.x ;
-    camera.position.y = vector.y ;
-    camera.position.z = vector.z + 5000 ;
-    controls.target = vector;
-    camera.lookAt(vector);
+    camera.position.x = earth.position.x ;
+    camera.position.y = earth.position.y ;
+    camera.position.z = earth.position.z + 5000 ;
+    controls.target = earth.position;
+    camera.lookAt(earth);
     
 });
 
