@@ -45,7 +45,7 @@ venusR = displayVenusR;
 
 //the sun
 // TODO: maybe change all these Geometry methods into a single class
-const geometrySun = new THREE.SphereGeometry( realSunR*10, 32, 15 );
+const geometrySun = new THREE.SphereGeometry( realSunR*10, 128, 64 );
 const textureSun = new THREE.TextureLoader().load("Textures/Sun.jpg")
 const materialSun = new THREE.MeshBasicMaterial( {map: textureSun} );
 sun = new THREE.Mesh( geometrySun, materialSun );
@@ -56,11 +56,11 @@ sunGrav = new THREE.Mesh( sunGravGeo, materialSun );
 scene.add( sunGrav);
 
 //the earth
-const geometry = new THREE.SphereGeometry( earthR, 32, 20 );
+const geometry = new THREE.SphereGeometry( earthR, 64, 32 );
 const texture = new THREE.TextureLoader().load("Textures/Earth-Clear.jpg")
 const material = new THREE.MeshBasicMaterial( {map: texture} );
 earth = new THREE.Mesh( geometry, material );
-earth.position.x = realSunR + AU
+earth.position.z = realSunR + AU
 sun.add( earth );
 
 const earthOrbit = new THREE.EllipseCurve(
@@ -71,7 +71,6 @@ const earthOrbit = new THREE.EllipseCurve(
 	0                 // aRotation
 );
 
-earth.rotation.x = Math.PI / 2;
 
 //drawing Earth's orbit
 const earthPoints = earthOrbit.getPoints( 500 );
@@ -79,6 +78,8 @@ const EarthOrbitGeometry = new THREE.BufferGeometry().setFromPoints( earthPoints
 const orbmaterial = new THREE.LineBasicMaterial( { color: 0x0d0dd1 } );
 const earthOrbitLine = new THREE.Line( EarthOrbitGeometry, orbmaterial );
 scene.add( earthOrbitLine );
+//Change the orientation of the orbit line by 90 degrees to be less jank
+earthOrbitLine.rotation.x = Math.PI / 2;
 
 //the moon
 const geometryMoon = new THREE.SphereGeometry( moonR, 32, 15 );
@@ -86,7 +87,7 @@ const textureMoon = new THREE.TextureLoader().load("Textures/Moon.jpg")
 const materialMoon = new THREE.MeshBasicMaterial( {map: textureMoon} );
 moon = new THREE.Mesh( geometryMoon, materialMoon );
 //384400KM is the distance ,
-moon.position.x = earthR + 3844.00;
+moon.position.z = earthR + 3844.00;
 earth.add( moon );
 
 const moonOrbit = new THREE.EllipseCurve(
@@ -118,24 +119,25 @@ const MerOrbitGeometry = new THREE.BufferGeometry().setFromPoints( merPoints );
 // const orbmaterial = new THREE.LineBasicMaterial( { color: 0x0d0dd1 } );
 const merOrbitLine = new THREE.Line( MerOrbitGeometry, orbmaterial );
 scene.add( merOrbitLine );
+merOrbitLine.rotation.x += Math.PI / 2;
 
 //mercury - 2440KM radius
-const geometryMer = new THREE.SphereGeometry( mercuryR, 32, 15 );
+const geometryMer = new THREE.SphereGeometry( mercuryR, 64, 32 );
 const textureMer = new THREE.TextureLoader().load("Textures/Mercury.jpg")
 const materialMer = new THREE.MeshBasicMaterial( {map: textureMer} );
 mercury = new THREE.Mesh( geometryMer, materialMer );
 //47 000 000km 
-mercury.position.x = realSunR + 47000.000;
+mercury.position.z = realSunR + 47000.000;
 //new to do math to move planet
-merOrbitLine.add( mercury );
+scene.add( mercury );
 
 //venus - 6051.8KM radius
-const geometryVen = new THREE.SphereGeometry( venusR, 32, 15 );
+const geometryVen = new THREE.SphereGeometry( venusR, 64, 32 );
 const textureVen = new THREE.TextureLoader().load("Textures/Venus.jpg")
 const materialVen = new THREE.MeshBasicMaterial( {map: textureVen} );
 venus = new THREE.Mesh( geometryVen, materialVen );
 //108 940 000km 
-venus.position.x = realSunR + 108940.000;
+venus.position.z = realSunR + 108940.000;
 sun.add( venus );
 
 const venusOrbit = new THREE.EllipseCurve(
@@ -151,11 +153,12 @@ const VenusOrbitGeometry = new THREE.BufferGeometry().setFromPoints( venusPoints
 const VenusOrbitLine = new THREE.Line( VenusOrbitGeometry, orbmaterial );
 VenusOrbitLine.opacity = 0.5;
 scene.add( VenusOrbitLine );
+VenusOrbitLine.rotation.x = Math.PI / 2;
 
 //camera 
-camera.position.x = 0;
-camera.position.y = 100000;
-camera.position.z = 0;
+camera.position.z = 450000;
+camera.position.x = -2000;
+camera.position.y = -10000;
 //takes x,y,z args, points camera at that location
 //camera.lookAt(sun.position);
 
@@ -193,9 +196,9 @@ window.addEventListener('resize', onWindowResize, false);
 
 //View world from top-down perspective
 export function topDown(){
-    camera.position.z = 450000;
-    camera.position.x = -2000;
-    camera.position.y = -10000;
+    camera.position.x = 0;
+    camera.position.y = 200000;
+    camera.position.z = 0;
     camera.lookAt(0,0,0);
 }
 
@@ -247,15 +250,14 @@ viewVenus.addEventListener("click", function()
 
 // START OF STARSHIP SECTION //
 //TODO -- ADJUST CAMERA TO BE LESS JANKY -- MAKE CONTROLS BETTER (SMOOTHER) AND DIRECTIONAL
-
+//TODO -- REMOVE EVENT LISTENER WHEN SPACESHIP TURNED OFF
 let playerShip;
-
 document.getElementById('flyShip').addEventListener("click", function()
 {
     if(!playerShip){
         playerShip = new starShip(new THREE.Vector3(10000.0, 10000.0, 10000.0),true);
         playerShip.createStarship();
-        const cameraOffset = new THREE.Vector3(250.0, 250.0, 250.0);
+        const cameraOffset = new THREE.Vector3(0.5, 0.5, 0.5);
         const objectPosition = new THREE.Vector3();
         camera.position.set(playerShip.positionVector.x,playerShip.positionVector.y,playerShip.positionVector.z).add(cameraOffset);
         camera.lookAt(10000,10000,10000);
@@ -264,7 +266,10 @@ document.getElementById('flyShip').addEventListener("click", function()
 
         if(playerShip.isActive == true){
             document.addEventListener("keydown", function(e){
-            playerShip.move(e.key);
+            //Gets the speed multiplier from the speed slider
+            let speedMultiplier = document.getElementById('speedRange').value / 5;
+            //Send the pressed key and the speed multiplier to the move function to move the ship
+            playerShip.move(e.key,speedMultiplier);
             
             });
             }
@@ -293,7 +298,7 @@ class starShip {
 
 
     createStarship(){
-        const starShipGeometry = new THREE.SphereGeometry(15,32,16);
+        const starShipGeometry = new THREE.SphereGeometry(0.01,32,16);
         //Commented out until I actually have a texture to load
         // const starShipTexture = new THREE.TextureLoader().load() 
         const starShipMaterial = new THREE.MeshBasicMaterial( { color: 0x0000ff } );
@@ -319,21 +324,34 @@ class starShip {
     }
 
 
-    move(key){
+    move(key,speedMultiplier){
+        //This gets the current direction the camera is facing, so that holding 'w' moves you forward no matter the orientation 
+        var direction = new THREE.Vector3();
+        camera.getWorldDirection( direction);
+        //Makes the amount moved larger by a factor of 10
+        direction.multiplyScalar(10 * speedMultiplier);
         switch(key){
             case 'w':
-                this.ship.position.x +=5;
+                //this moves the ship along the scene
+                camera.position.add( direction );
+                //this moves the camera with the ship, keeping it a consistent amount away
+                this.ship.position.add( direction );
                 break;
             case 'a':
 
+                break;
             case 's':
-                this.ship.position.x -=5;
+                
                 break;
             case 'd':
 
+                break;
             case 'q':
-
+                
+                break;
             case 'e':
+
+                break;
             
         }
     }
