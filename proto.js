@@ -102,7 +102,6 @@ moonOrbitLine.rotation.x = Math.PI / 2;
 earth.add( moonOrbitLine );
 
 
-
 const mercuryOrbit = new THREE.EllipseCurve(
 	0,  -10000,            // ax, aY
 	realSunR + 47000.000, realSunR + 70000.000,           // xRadius, yRadius
@@ -168,6 +167,7 @@ let angleM = 0;
 let angleV = 0;
 let angleE = 0;
 function animate(){
+
     requestAnimationFrame(animate);
 
     //Change the rotation speed of the earth
@@ -177,7 +177,6 @@ function animate(){
     moon.rotation.y += 0.001;
     // sun.rotation.z += 0.0001;
     // sunGrav.rotation.z += 0.0005;
-    controls.update();
     //camera.lookAt(0,0,0);
 
     //this controls the orbital movement of mercury
@@ -198,8 +197,9 @@ function animate(){
     earth.position.x = 696.340 + 150000.000 * (Math.cos(angleE));
     earth.updateMatrix();
   
+    controls.update();
+
     renderer.render(scene, camera);
-    
     
 }
 
@@ -235,28 +235,24 @@ viewEarth.addEventListener("click", function()
 let viewMercury = document.getElementById('viewMercuryButton');
 viewMercury.addEventListener("click", function()
 {   
-    var vector = new THREE.Vector3();
-    vector.setFromMatrixPosition( mercury.matrixWorld );
 
-    camera.position.x = vector.x;
-    camera.position.y = vector.y;
-    camera.position.z = vector.z + 5000;
-    controls.target = vector;
-    camera.lookAt(vector);
+    camera.position.x = mercury.position.x;
+    camera.position.y = mercury.position.y;
+    camera.position.z = mercury.position.z + 5000;
+    controls.target = mercury.position;
+    camera.lookAt(mercury);
  
 });
 
 let viewVenus = document.getElementById('viewVenusButton');
 viewVenus.addEventListener("click", function()
 {   
-    var vector = new THREE.Vector3();
-    vector.setFromMatrixPosition( venus.matrixWorld );
 
-    camera.position.x = vector.x ;
-    camera.position.y = vector.y;
-    camera.position.z = vector.z + 5000;
-    controls.target = vector;
-    camera.lookAt(vector);
+    camera.position.x = venus.position.x;
+    camera.position.y = venus.position.y;
+    camera.position.z = venus.position.z + 5000;
+    controls.target = venus.position;
+    camera.lookAt(venus);
   
 });
 
