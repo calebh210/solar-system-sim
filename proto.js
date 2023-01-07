@@ -34,7 +34,7 @@ camera = new THREE.PerspectiveCamera(
     75, 
     window.innerWidth / window.innerHeight,
     0.1,
-    1000000
+    10000000
 );
 
 renderer = new THREE.WebGLRenderer({ antialias: true});
@@ -52,13 +52,14 @@ venusR = displayVenusR;
 sunR = displaySunR
 
 
-//creating the scene background
+//This is the code for the skybox
+//Whats happening is that the scene is inside a giant cube, which allows you to pan with the background
+const sky = new THREE.SphereGeometry(1000000,32,16);
+const backgroundTexture = new THREE.TextureLoader().load("Textures/2k_background.jpg");
+const skyMat = new THREE.MeshBasicMaterial({map: backgroundTexture, side: THREE.BackSide });
+const skybox = new THREE.Mesh( sky, skyMat);
+scene.add( skybox );
 
-const bLoader = new THREE.TextureLoader();
-bLoader.load('Textures/2k_background.jpg' , function(texture)
-            {
-             scene.background = texture;  
-            });
 
 //the sun
 // TODO: maybe change all these Geometry methods into a single class
@@ -187,6 +188,22 @@ mars.position.z = realSunR + 228000;
 scene.add( mars );
 
 
+const marsOrbit = new THREE.EllipseCurve(
+	0,  0,            // ax, aY
+	realSunR + 228000.000, realSunR + 228000.000,           // xRadius, yRadius
+	0,  2 * Math.PI,  // aStartAngle, aEndAngle
+	false,            // aClockwise
+	0                 // aRotation
+);
+
+const marsPoints = marsOrbit.getPoints( 1000 );
+const MarsOrbitGeometry = new THREE.BufferGeometry().setFromPoints( marsPoints );
+// const orbmaterial = new THREE.LineBasicMaterial( { color: 0x0d0dd1 } );
+const marsOrbitLine = new THREE.Line( MarsOrbitGeometry, orbmaterial );
+scene.add( marsOrbitLine );
+marsOrbitLine.rotation.x += Math.PI / 2;
+
+
 //camera 
 camera.position.z = 450000;
 camera.position.x = -2000;
@@ -207,6 +224,7 @@ let timeMultiplier = 1;
 let angleM = 0;
 let angleV = 0;
 let angleE = 0;
+let angleMars = 0;
 function animate(){
 
     requestAnimationFrame(animate);
@@ -234,6 +252,10 @@ function animate(){
     earth.position.x = 696.340 + 150000.000 * (Math.cos(angleE));
     earth.updateMatrix();
   
+    angleMars += 0.00002 * timeMultiplier;
+    mars.position.z = 696.340 + 228000.000 * (Math.sin(angleMars));
+    mars.position.x = 696.340 + 228000.000 * (Math.cos(angleMars));
+    mars.updateMatrix();
 
     controls.update();
 
