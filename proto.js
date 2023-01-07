@@ -2,8 +2,10 @@
 import * as THREE from "https://cdnjs.cloudflare.com/ajax/libs/three.js/0.148.0/three.module.js";
 import { OrbitControls } from 'https://unpkg.com/three@0.127.0/examples/jsm/controls/OrbitControls.js';
 
+// Textures taken from https://www.solarsystemscope.com/textures/
+//All textures are 2k, 8k options are available, but increase load times
 
-let scene, camera, renderer, earth, moon, sun, controls, mercury, venus;
+let scene, camera, renderer, earth, moon, sun, controls, mercury, venus, mars;
 
 
 //DEFINING ASTRONOMICAL SIZES
@@ -19,6 +21,7 @@ let realEarthR = 6.371;
 let displayEarthR = 637.100;
 let realSunR = 696.340;
 let displaySunR = 6963.40
+let displayMarsR = 338.95;
 
 let earthR, moonR, mercuryR, venusR, sunR;
 
@@ -49,14 +52,14 @@ sunR = displaySunR
 //the sun
 // TODO: maybe change all these Geometry methods into a single class
 const geometrySun = new THREE.SphereGeometry( sunR, 128, 64 );
-const textureSun = new THREE.TextureLoader().load("Textures/Sun.jpg")
+const textureSun = new THREE.TextureLoader().load("Textures/2k_sun.jpg")
 const materialSun = new THREE.MeshBasicMaterial( {map: textureSun} );
 sun = new THREE.Mesh( geometrySun, materialSun );
 scene.add( sun );
 
 //the earth
-const geometry = new THREE.SphereGeometry( earthR, 64, 32 );
-const texture = new THREE.TextureLoader().load("Textures/Earth-Clear.jpg")
+const geometry = new THREE.SphereGeometry( earthR, 128, 64 );
+const texture = new THREE.TextureLoader().load("Textures/2k_earth_daymap.jpg")
 const material = new THREE.MeshBasicMaterial( {map: texture} );
 earth = new THREE.Mesh( geometry, material );
 earth.position.z = realSunR + AU
@@ -69,6 +72,15 @@ const earthOrbit = new THREE.EllipseCurve(
 	false,            // aClockwise
 	0                 // aRotation
 );
+
+//this is to add clouds above Earth, looks pretty but increases load time
+const cloudGeo = new THREE.SphereGeometry( earthR+15, 128, 64 );
+const cloudTexture = new THREE.TextureLoader().load("Textures/2k_earth_clouds.jpg")
+const cloudMaterial = new THREE.MeshBasicMaterial( {map: cloudTexture} );
+cloudMaterial.transparent = true;
+cloudMaterial.opacity = 0.7;
+const cloud = new THREE.Mesh(cloudGeo, cloudMaterial );
+earth.add( cloud );
 
 
 //drawing Earth's orbit
@@ -85,7 +97,7 @@ earthOrbitLine.rotation.x = Math.PI / 2;
 
 //the moon
 const geometryMoon = new THREE.SphereGeometry( moonR, 32, 15 );
-const textureMoon = new THREE.TextureLoader().load("Textures/Moon.jpg")
+const textureMoon = new THREE.TextureLoader().load("Textures/2k_moon.jpg")
 const materialMoon = new THREE.MeshBasicMaterial( {map: textureMoon} );
 moon = new THREE.Mesh( geometryMoon, materialMoon );
 //384400KM is the distance ,
@@ -124,7 +136,7 @@ merOrbitLine.rotation.x += Math.PI / 2;
 
 //mercury - 2440KM radius
 const geometryMer = new THREE.SphereGeometry( mercuryR, 64, 32 );
-const textureMer = new THREE.TextureLoader().load("Textures/Mercury.jpg")
+const textureMer = new THREE.TextureLoader().load("Textures/2k_mercury.jpg");
 const materialMer = new THREE.MeshBasicMaterial( {map: textureMer} );
 mercury = new THREE.Mesh( geometryMer, materialMer );
 //47 000 000km 
@@ -134,7 +146,7 @@ scene.add( mercury );
 
 //venus - 6051.8KM radius
 const geometryVen = new THREE.SphereGeometry( venusR, 64, 32 );
-const textureVen = new THREE.TextureLoader().load("Textures/Venus.jpg")
+const textureVen = new THREE.TextureLoader().load("Textures/2k_venus_surface.jpg");
 const materialVen = new THREE.MeshBasicMaterial( {map: textureVen} );
 venus = new THREE.Mesh( geometryVen, materialVen );
 //108 940 000km 
@@ -155,6 +167,14 @@ const VenusOrbitLine = new THREE.Line( VenusOrbitGeometry, orbmaterial );
 VenusOrbitLine.opacity = 0.5;
 scene.add( VenusOrbitLine );
 VenusOrbitLine.rotation.x = Math.PI / 2;
+
+const geometryMars = new THREE.SphereGeometry( displayMarsR, 64, 32);
+const textureMars = new THREE.TextureLoader().load("Textures/2k_mars.jpg");
+const materialMars = new THREE.MeshBasicMaterial( {map: textureMars} );
+mars = new THREE.Mesh( geometryMars, materialMars );
+mars.position.z = realSunR + 228000;
+scene.add( mars );
+
 
 //camera 
 camera.position.z = 450000;
