@@ -41,6 +41,8 @@ renderer = new THREE.WebGLRenderer({ antialias: true});
 
 renderer.setSize(window.innerWidth, window.innerHeight);
 
+// renderer.setClearColor(0xff0000, 1);
+
 document.body.appendChild(renderer.domElement);
 
 mercuryR = displayMercuryR;
@@ -48,6 +50,15 @@ earthR = displayEarthR;
 moonR = displayMoonR;
 venusR = displayVenusR;
 sunR = displaySunR
+
+
+//creating the scene background
+
+const bLoader = new THREE.TextureLoader();
+bLoader.load('Textures/2k_background.jpg' , function(texture)
+            {
+             scene.background = texture;  
+            });
 
 //the sun
 // TODO: maybe change all these Geometry methods into a single class
