@@ -47,17 +47,29 @@
             <!-- <button type="button" id = "viewEarthButton" onclick="">View Earth</button> -->
 
             <div class="ml-3 mt-2 dropdown">
-                <button class="button-menu btn-sm btn-light dropdown-toggle" style="width: 85%;" type="button" data-toggle="dropdown">  <span class="caret"> Select Planet to View </span></button>
+                <button class="button-menu btn-sm btn-light dropdown-toggle" style="width: 85%;" type="button" data-toggle="dropdown">  <span class="caret"> Select Planet to Focus </span></button>
                 <ul class="dropdown-menu">
+                    <li><a href="#" id = "viewSunButton">Sun </a></li>
                   <li><a href="#" id = "viewMercuryButton">Mercury </a></li>
                   <li><a href="#" id = "viewVenusButton">Venus </a></li>
                   <li><a href="#" id = "viewEarthButton">Earth </a></li>
                 </ul>
               </div>
+            
+            
+            <div class = "spaceshipHeader">
+                <p class = "mt-2"> <i class="fa-solid fa-clock"> </i> Set Time Scale </p>
+            </div>
 
+            <!-- Div for the time multiplier buttons -->
+            <div class = "ml-3 mt-2 row">
+                <button class="button-menu mr-2" id = "timeButton1x"> 1x </button>
+                <button class="button-menu mr-2" id = "timeButton100x"> 100x </button>
+                <button class="button-menu mr-2" id = "timeButton10000x"> 10000x </button>
+            </div>
             <!-- Start of the spaceship section -->
             <div class="spaceshipHeader">
-                <span><i class="fa-solid fa-shuttle-space"></i> Spaceship Settings </span>
+                <span><i class="fa-solid fa-shuttle-space mt-2 mb-2"></i> Spaceship Settings </span>
             </div>
 
             <!-- Spaceship speed slider -->
@@ -71,12 +83,9 @@
                <button class="button-menu ml-3 mt-2 mb-2" style="width: 80%;" type ="button" id="flyShip" >Fly Spaceship</button>
             </div>
               
-            
-
           </div>
         </div>
-          
-          <!-- Use any element to open the sidenav -->    
+
           
         <script>
             

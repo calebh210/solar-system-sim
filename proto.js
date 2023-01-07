@@ -3,19 +3,8 @@ import * as THREE from "https://cdnjs.cloudflare.com/ajax/libs/three.js/0.148.0/
 import { OrbitControls } from 'https://unpkg.com/three@0.127.0/examples/jsm/controls/OrbitControls.js';
 
 
-let scene, camera, renderer, earth, moon, sun, sunGrav, controls, mercury, venus;
+let scene, camera, renderer, earth, moon, sun, controls, mercury, venus;
 
-function init(){
-
-
-scene = new THREE.Scene();
-
-camera = new THREE.PerspectiveCamera(
-    75, 
-    window.innerWidth / window.innerHeight,
-    0.1,
-    1000000
-);
 
 //DEFINING ASTRONOMICAL SIZES
 //All sizes are in KM and /100 from actual size (but remain constant so should be realistic model)
@@ -29,8 +18,21 @@ let displayMoonR = 173.70;
 let realEarthR = 6.371;
 let displayEarthR = 637.100;
 let realSunR = 696.340;
+let displaySunR = 6963.40
 
-let earthR, moonR, mercuryR, venusR;
+let earthR, moonR, mercuryR, venusR, sunR;
+
+function init(){
+
+
+scene = new THREE.Scene();
+
+camera = new THREE.PerspectiveCamera(
+    75, 
+    window.innerWidth / window.innerHeight,
+    0.1,
+    1000000
+);
 
 renderer = new THREE.WebGLRenderer({ antialias: true});
 
@@ -42,10 +44,11 @@ mercuryR = displayMercuryR;
 earthR = displayEarthR;
 moonR = displayMoonR;
 venusR = displayVenusR;
+sunR = displaySunR
 
 //the sun
 // TODO: maybe change all these Geometry methods into a single class
-const geometrySun = new THREE.SphereGeometry( realSunR*10, 128, 64 );
+const geometrySun = new THREE.SphereGeometry( sunR, 128, 64 );
 const textureSun = new THREE.TextureLoader().load("Textures/Sun.jpg")
 const materialSun = new THREE.MeshBasicMaterial( {map: textureSun} );
 sun = new THREE.Mesh( geometrySun, materialSun );
@@ -72,6 +75,9 @@ const earthOrbit = new THREE.EllipseCurve(
 const earthPoints = earthOrbit.getPoints( 500 );
 const EarthOrbitGeometry = new THREE.BufferGeometry().setFromPoints( earthPoints );
 const orbmaterial = new THREE.LineBasicMaterial( { color: 0x0d0dd1 } );
+//set the color of the orbit line to be translucent so that it doesn't cover the planets
+orbmaterial.transparent = true;
+orbmaterial.opacity = 0.4;
 const earthOrbitLine = new THREE.Line( EarthOrbitGeometry, orbmaterial );
 scene.add( earthOrbitLine );
 //Change the orientation of the orbit line by 90 degrees to be less jank
@@ -109,7 +115,7 @@ const mercuryOrbit = new THREE.EllipseCurve(
 	false,            // aClockwise
 	0                 // aRotation
 );
-const merPoints = mercuryOrbit.getPoints( 50 );
+const merPoints = mercuryOrbit.getPoints( 100 );
 const MerOrbitGeometry = new THREE.BufferGeometry().setFromPoints( merPoints );
 // const orbmaterial = new THREE.LineBasicMaterial( { color: 0x0d0dd1 } );
 const merOrbitLine = new THREE.Line( MerOrbitGeometry, orbmaterial );
@@ -158,11 +164,15 @@ camera.position.y = -10000;
 //camera.lookAt(sun.position);
 
 controls = new OrbitControls(camera, renderer.domElement);
+controls.enablePan = false;
 controls.enableDamping = true;
 controls.dampingFactor = 0.05;
 
 }
 
+
+
+let timeMultiplier = 1;
 let angleM = 0;
 let angleV = 0;
 let angleE = 0;
@@ -171,32 +181,29 @@ function animate(){
     requestAnimationFrame(animate);
 
     //Change the rotation speed of the earth
-  
     earth.rotation.y += 0.0005;
     //set Moon's rotation
     moon.rotation.y += 0.001;
-    // sun.rotation.z += 0.0001;
-    // sunGrav.rotation.z += 0.0005;
-    //camera.lookAt(0,0,0);
-
+   
     //this controls the orbital movement of mercury
-    angleM += 0.001;
+    angleM += 0.00001 * timeMultiplier;
     mercury.position.z = 696.340 + 70000.000 * (Math.sin(angleM)) - 10000;
     mercury.position.x = 696.340 + 47000.000 * (Math.cos(angleM));
     mercury.updateMatrix();
 
     //this controls the orbital movement of Venus
-    angleV += 0.0005;
+    angleV += 0.00005 * timeMultiplier;
     venus.position.z = 696.340 + 108940 * (Math.sin(angleV));
-    venus.position.x = 696.340 + 108940 * (Math.cos(angleV));
+    venus.position.x = 696.340 + 108940 * ( Math.cos(angleV));
     venus.updateMatrix();
 
     //this controls the orbital movement of the Earth
-    angleE += 0.0001;
+    angleE += 0.00001 * timeMultiplier;
     earth.position.z = 696.340 + 150000.000 * (Math.sin(angleE));
     earth.position.x = 696.340 + 150000.000 * (Math.cos(angleE));
     earth.updateMatrix();
   
+
     controls.update();
 
     renderer.render(scene, camera);
@@ -220,7 +227,20 @@ export function topDown(){
 }
 
 
-//View Earth Button
+//View Sun Button
+
+let viewSun = document.getElementById('viewSunButton');
+viewSun.addEventListener("click", function()
+{   
+    camera.position.x = sun.position.x ;
+    camera.position.y = sun.position.y ;
+    camera.position.z = sun.position.z + 15000 ;
+    controls.target = sun.position;
+    camera.lookAt(sun);
+    
+});
+
+//view earth button
 let viewEarth = document.getElementById('viewEarthButton');
 viewEarth.addEventListener("click", function()
 {   
@@ -257,6 +277,86 @@ viewVenus.addEventListener("click", function()
 });
 
 
+//function  to set planets to their real, to scale sizes.
+function setRealSizes(planet){
+    planet.scale.x = 0.01;
+    planet.scale.y = 0.01;
+    planet.scale.z = 0.01;
+    planet.updateMatrix();
+}
+
+//function  to set planets to their display sizes. Display sizes exists so that planets can actually be seen 
+function setDisplaySizes(planet){
+    planet.scale.x = 1;
+    planet.scale.y = 1;
+    planet.scale.z = 1;
+    planet.updateMatrix();
+}
+
+
+//This is for the "real sizes" checkbox
+document.addEventListener('DOMContentLoaded', function () {
+    var checkbox = document.querySelector('input[type="checkbox"]');
+  
+    checkbox.addEventListener('change', function () {
+      if (checkbox.checked) {
+        //reduces the size of the sun by a factor of 10x. Since the display size of the sun is 10x real, the sun is now real size
+        sun.scale.x = 0.1;
+        sun.scale.y = 0.1;
+        sun.scale.z = 0.1;
+        sun.updateMatrix();
+
+        //this can be optimized by putting the objects into an array and then parsing that array, but for now I'll just do it manually
+        setRealSizes(mercury);
+        setRealSizes(venus);
+        setRealSizes(earth);
+        //BUG: the Moon's orbit line should not change when 'real sizes' is toggled.
+        //setRealSizes(moon);
+
+      } else {
+        sun.scale.x = 1;
+        sun.scale.y = 1;
+        sun.scale.z = 1;
+        sun.updateMatrix();
+
+        setDisplaySizes(mercury);
+        setDisplaySizes(venus);
+        setDisplaySizes(earth);
+        setDisplaySizes(moon);
+
+
+      }
+    });
+  });
+
+
+//Event listener for the time buttons
+let timeButton1x = document.getElementById('timeButton1x');
+timeButton1x.addEventListener("click", function(){
+
+    timeMultiplier = 1;
+
+});
+
+let timeButton100x = document.getElementById('timeButton100x');
+timeButton100x.addEventListener("click", function(){
+
+    timeMultiplier = 100;
+
+});
+
+let timeButton10000x = document.getElementById('timeButton10000x');
+timeButton10000x.addEventListener("click", function(){
+
+    timeMultiplier = 10000;
+
+});
+
+
+
+
+
+
 
 // START OF STARSHIP SECTION //
 //TODO -- ADJUST CAMERA TO BE LESS JANKY -- MAKE CONTROLS BETTER (SMOOTHER) AND DIRECTIONAL
@@ -264,6 +364,7 @@ viewVenus.addEventListener("click", function()
 let playerShip;
 document.getElementById('flyShip').addEventListener("click", function()
 {
+    
     if(!playerShip){
         playerShip = new starShip(new THREE.Vector3(10000.0, 10000.0, 10000.0),true);
         playerShip.createStarship();
@@ -273,16 +374,6 @@ document.getElementById('flyShip').addEventListener("click", function()
         camera.lookAt(10000,10000,10000);
         // controls.target = playerShip.positionVector;
         console.log(camera.position);
-
-        if(playerShip.isActive == true){
-            document.addEventListener("keydown", function(e){
-            //Gets the speed multiplier from the speed slider
-            let speedMultiplier = document.getElementById('speedRange').value / 5;
-            //Send the pressed key and the speed multiplier to the move function to move the ship
-            playerShip.move(e.key,speedMultiplier);
-            
-            });
-            }
  
     }else if(playerShip.isActive == true){
         playerShip.removeStarship();
@@ -320,17 +411,23 @@ class starShip {
     }
 
     addStarship(){
+        alert("Press 'W' to move the ship in the direction the camera is facing");
         //add the ship object to the canvas
         scene.add( this.ship );
         //focus controls to the ship (allow user to use orbit controls around the ship)
         controls.target = this.ship.position;
         console.log("ship added")
         this.isActive = true;
+
+        //event listener to move starship
+        document.addEventListener("keydown", this.eventListenerFunction);
     }
 
     removeStarship(){
         scene.remove( this.ship );
         this.isActive = false;
+        //remove the event listener when the ship is removed
+        document.removeEventListener("keydown", this.eventListenerFunction);
     }
 
 
@@ -364,6 +461,13 @@ class starShip {
                 break;
             
         }
+    }
+
+    eventListenerFunction(e){
+        //Gets the speed multiplier from the speed slider
+        let speedMultiplier = document.getElementById('speedRange').value / 5;
+        //Send the pressed key and the speed multiplier to the move function to move the ship
+        playerShip.move(e.key,speedMultiplier);
     }
 
     //Creating the camera for the ship -- switch from orbit cam to perspective -- might not need this

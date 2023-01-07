@@ -201,9 +201,10 @@
   cursor: pointer;
 }
 
-#speedLabel, #speedDisplay{
+#speedLabel, #speedDisplay, #switchLabel{
   color:gray;
   margin-left: 15px;
   font-family: "JetBrains Mono",monospace;
-}
+} 
+
 
