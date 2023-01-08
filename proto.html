@@ -44,26 +44,35 @@
 
             <button class="ml-3 mt-3 button-menu" type="button" style="width: 80%;" onclick="module.topDown() ">View Top-Down</button>
 
-            <!-- <button type="button" id = "viewEarthButton" onclick="">View Earth</button> -->
-
-            <div class="ml-3 mt-2 dropdown">
-                <button class="button-menu btn-sm btn-light dropdown-toggle" style="width: 85%;" type="button" data-toggle="dropdown">  <span class="caret"> Select Planet to Focus </span></button>
+            <div class="ml-3 mt-2 dropdown" >
+                <button class="button-menu btn-sm btn-light dropdown-toggle" style="width: 85%;" type="button" data-toggle="dropdown" data-display="static">  <span class="caret"> Select Planet to View </span></button>
                 <ul class="dropdown-menu">
-                    <li><a href="#" id = "viewSunButton">Sun </a></li>
-                  <li><a href="#" id = "viewMercuryButton">Mercury </a></li>
-                  <li><a href="#" id = "viewVenusButton">Venus </a></li>
+                  <li><a class = "dropdown-item" href="#" id = "viewSunButton">Sun </a></li>
+                  <li><a class = "dropdown-item" href="#" id = "viewMercuryButton">Mercury </a></li>
+                  <li><a class = "dropdown-item" href="#" id = "viewVenusButton">Venus </a></li>
                   <li><a class = "dropdown-item" href="#" id = "viewEarthButton">Earth </a>
                     <ul class="dropdown-menu dropdown-submenu">
                         <li>
-                        <a class="dropdown-item" href="#">Moon</a>
+                        <a class="dropdown-item" href="#" id = "viewMoonButton">Moon</a>
                         </li>
                     </ul>
-                </li>
+                    </li>
                     
-                  <li><a href="#" id = "viewMarsButton">Mars </a></li>
+                <li><a class = "dropdown-item" href="#" id = "viewMarsButton">Mars </a>
+                
+                    <ul class="dropdown-menu dropdown-submenu">
+                        <li>
+                        <a class="dropdown-item" href="#" id = "viewPhobosButton">Phobos</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="#" id = "viewDeimosButton">Deimos</a>
+                        </li>
+                    </ul>
+                
+                </li>
                 </ul>
               </div>
-            
+             
             
             <div class = "spaceshipHeader">
                 <p class = "mt-2"> <i class="fa-solid fa-clock"> </i> Set Time Scale </p>

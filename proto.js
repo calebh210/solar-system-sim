@@ -1,12 +1,13 @@
 
 import * as THREE from "https://cdnjs.cloudflare.com/ajax/libs/three.js/0.148.0/three.module.js";
 import { OrbitControls } from 'https://unpkg.com/three@0.127.0/examples/jsm/controls/OrbitControls.js';
+import { GLTFLoader } from 'https://unpkg.com/three@0.127.0/examples/jsm/loaders/GLTFLoader.js';
 
 // Textures taken from https://www.solarsystemscope.com/textures/
 //All textures are 2k, 8k options are available, but increase load times
-
+//3D models taken from https://solarsystem.nasa.gov/resources
 let scene, camera, renderer, earth, moon, sun, controls, mercury, venus, mars;
-
+let realsize = false;
 
 //DEFINING ASTRONOMICAL SIZES
 //All sizes are in KM and /100 from actual size (but remain constant so should be realistic model)
@@ -22,14 +23,59 @@ let displayEarthR = 637.100;
 let realSunR = 696.340;
 let displaySunR = 6963.40
 let displayMarsR = 338.95;
+let phobosR = 11.267 / 100;
 
 let earthR, moonR, mercuryR, venusR, sunR;
 
-function init(){
+//Class to create the geometry for all celestial objects (stars, moons, suns)
+class CelestialObject{
 
+    constructor(radius, orbit, texture){
+        this.radius = radius;
+        this.orbit = orbit;
+        this.texture = texture;
+        this.mesh;
+        this.childrenArray = [];
+        this.rotation;
+        this.orbitalSpeed;
+        // WIP
+        // this.mass = mass;
+        // this.gravity = gravity;
+    }  
+    
+    buildMesh(){
+        const geometry = new THREE.SphereGeometry( this.radius, 128, 64 );
+        const texture = new THREE.TextureLoader().load(this.texture);
+        const material = new THREE.MeshBasicMaterial( {map: texture} );
+        this.mesh = new THREE.Mesh( geometry, material);
+        scene.add(this.mesh);
+        this.mesh.position.z = this.orbit;
+    }
+
+    //method to add children to object. used for moons and atmospheres
+    addChild(childRadius, childOrbit, childTexture, type){
+        const childGeometry = new THREE.SphereGeometry( childRadius, 128, 64 );
+        const childTextureLoaded = new THREE.TextureLoader().load(childTexture);
+        const childMaterial = new THREE.MeshBasicMaterial( {map: childTextureLoaded} );
+        if(type == "atmo"){
+            childMaterial.transparent = true;
+            childMaterial.opacity = 0.7;
+        }
+        let childObject = new THREE.Mesh( childGeometry, childMaterial);
+        childObject.position.z = childOrbit;
+        this.mesh.add(childObject);
+        return childObject;
+        
+    }
+}
+
+
+//setting up the scene
+function init(){
 
 scene = new THREE.Scene();
 
+//defining the camera's settings
 camera = new THREE.PerspectiveCamera(
     75, 
     window.innerWidth / window.innerHeight,
@@ -37,12 +83,9 @@ camera = new THREE.PerspectiveCamera(
     10000000
 );
 
+//creating the renderer
 renderer = new THREE.WebGLRenderer({ antialias: true});
-
 renderer.setSize(window.innerWidth, window.innerHeight);
-
-// renderer.setClearColor(0xff0000, 1);
-
 document.body.appendChild(renderer.domElement);
 
 mercuryR = displayMercuryR;
@@ -51,31 +94,46 @@ moonR = displayMoonR;
 venusR = displayVenusR;
 sunR = displaySunR
 
-
 //This is the code for the skybox
-//Whats happening is that the scene is inside a giant cube, which allows you to pan with the background
-const sky = new THREE.SphereGeometry(1000000,32,16);
+//Whats happening is that the scene is inside a giant sphere, which allows you to pan with the background
+const sky = new THREE.SphereGeometry(1000000,64,32);
 const backgroundTexture = new THREE.TextureLoader().load("Textures/2k_background.jpg");
 const skyMat = new THREE.MeshBasicMaterial({map: backgroundTexture, side: THREE.BackSide });
 const skybox = new THREE.Mesh( sky, skyMat);
 scene.add( skybox );
 
-
 //the sun
-// TODO: maybe change all these Geometry methods into a single class
-const geometrySun = new THREE.SphereGeometry( sunR, 128, 64 );
-const textureSun = new THREE.TextureLoader().load("Textures/2k_sun.jpg")
-const materialSun = new THREE.MeshBasicMaterial( {map: textureSun} );
-sun = new THREE.Mesh( geometrySun, materialSun );
-scene.add( sun );
+const sunClass = new CelestialObject(6963.40,0,"Textures/2k_sun.jpg");
+sunClass.buildMesh();
+sun = sunClass.mesh;
+
+//mercury - 2440KM radius
+const mercuryClass = new CelestialObject(mercuryR, realSunR + 47000.000, "Textures/2k_mercury.jpg");
+mercuryClass.buildMesh();
+mercury = mercuryClass.mesh;
+
+//venus - 6051.8KM radius
+const venusClass = new CelestialObject(venusR, realSunR + 108940.000, "Textures/2k_venus_surface.jpg");
+venusClass.buildMesh();
+venus = venusClass.mesh;
 
 //the earth
-const geometry = new THREE.SphereGeometry( earthR, 128, 64 );
-const texture = new THREE.TextureLoader().load("Textures/2k_earth_daymap.jpg")
-const material = new THREE.MeshBasicMaterial( {map: texture} );
-earth = new THREE.Mesh( geometry, material );
-earth.position.z = realSunR + AU
-scene.add( earth );
+const earthClass = new CelestialObject(earthR,realSunR + AU,"Textures/2k_earth_daymap.jpg");
+earthClass.buildMesh();
+//mesh must be build before adding children
+//this is to add clouds above Earth, looks pretty but increases load time
+earthClass.addChild(earthR+35,0,"Textures/2k_earth_clouds.jpg","atmo");
+//the moon
+moon = earthClass.addChild(moonR, earthR + 3844.00, "Textures/2k_moon.jpg", "moon")
+earth = earthClass.mesh;
+
+//mars 
+const marsClass = new CelestialObject(displayMarsR, realSunR + 228000, "Textures/2k_mars.jpg");
+marsClass.buildMesh();
+//Phobos orbits so close to mars (6000KM) that a display radius is needed
+marsClass.addChild(phobosR*100, displayMarsR + 600, "Textures/Phobos.jpg", "moon")
+mars = marsClass.mesh;
+//TODO - add deimos
 
 const earthOrbit = new THREE.EllipseCurve(
 	0,  0,            // ax, aY
@@ -85,16 +143,9 @@ const earthOrbit = new THREE.EllipseCurve(
 	0                 // aRotation
 );
 
-//this is to add clouds above Earth, looks pretty but increases load time
-const cloudGeo = new THREE.SphereGeometry( earthR+15, 128, 64 );
-const cloudTexture = new THREE.TextureLoader().load("Textures/2k_earth_clouds.jpg")
-const cloudMaterial = new THREE.MeshBasicMaterial( {map: cloudTexture} );
-cloudMaterial.transparent = true;
-cloudMaterial.opacity = 0.7;
-const cloud = new THREE.Mesh(cloudGeo, cloudMaterial );
-earth.add( cloud );
 
 
+//TODO: Create function to hold all of these orbits
 //drawing Earth's orbit
 const earthPoints = earthOrbit.getPoints( 500 );
 const EarthOrbitGeometry = new THREE.BufferGeometry().setFromPoints( earthPoints );
@@ -106,15 +157,6 @@ const earthOrbitLine = new THREE.Line( EarthOrbitGeometry, orbmaterial );
 scene.add( earthOrbitLine );
 //Change the orientation of the orbit line by 90 degrees to be less jank
 earthOrbitLine.rotation.x = Math.PI / 2;
-
-//the moon
-const geometryMoon = new THREE.SphereGeometry( moonR, 32, 15 );
-const textureMoon = new THREE.TextureLoader().load("Textures/2k_moon.jpg")
-const materialMoon = new THREE.MeshBasicMaterial( {map: textureMoon} );
-moon = new THREE.Mesh( geometryMoon, materialMoon );
-//384400KM is the distance ,
-moon.position.z = earthR + 3844.00;
-earth.add( moon );
 
 const moonOrbit = new THREE.EllipseCurve(
 	0,  0,            // ax, aY
@@ -131,10 +173,10 @@ const moonOrbitLine = new THREE.Line( MoonOrbitGeometry, orbmaterial );
 moonOrbitLine.rotation.x = Math.PI / 2;
 earth.add( moonOrbitLine );
 
-
+//TODO: Find and put in the real numbers for this
 const mercuryOrbit = new THREE.EllipseCurve(
 	0,  -10000,            // ax, aY
-	realSunR + 47000.000, realSunR + 70000.000,           // xRadius, yRadius
+	realSunR + 60000.000, realSunR + 60000.000,           // xRadius, yRadius
 	0,  2 * Math.PI,  // aStartAngle, aEndAngle
 	false,            // aClockwise
 	0                 // aRotation
@@ -145,25 +187,6 @@ const MerOrbitGeometry = new THREE.BufferGeometry().setFromPoints( merPoints );
 const merOrbitLine = new THREE.Line( MerOrbitGeometry, orbmaterial );
 scene.add( merOrbitLine );
 merOrbitLine.rotation.x += Math.PI / 2;
-
-//mercury - 2440KM radius
-const geometryMer = new THREE.SphereGeometry( mercuryR, 64, 32 );
-const textureMer = new THREE.TextureLoader().load("Textures/2k_mercury.jpg");
-const materialMer = new THREE.MeshBasicMaterial( {map: textureMer} );
-mercury = new THREE.Mesh( geometryMer, materialMer );
-//47 000 000km 
-mercury.position.z = realSunR + 47000.000;
-//new to do math to move planet
-scene.add( mercury );
-
-//venus - 6051.8KM radius
-const geometryVen = new THREE.SphereGeometry( venusR, 64, 32 );
-const textureVen = new THREE.TextureLoader().load("Textures/2k_venus_surface.jpg");
-const materialVen = new THREE.MeshBasicMaterial( {map: textureVen} );
-venus = new THREE.Mesh( geometryVen, materialVen );
-//108 940 000km 
-venus.position.z = realSunR + 108940.000;
-scene.add( venus );
 
 const venusOrbit = new THREE.EllipseCurve(
 	0,  0,            // ax, aY
@@ -179,14 +202,6 @@ const VenusOrbitLine = new THREE.Line( VenusOrbitGeometry, orbmaterial );
 VenusOrbitLine.opacity = 0.5;
 scene.add( VenusOrbitLine );
 VenusOrbitLine.rotation.x = Math.PI / 2;
-
-const geometryMars = new THREE.SphereGeometry( displayMarsR, 64, 32);
-const textureMars = new THREE.TextureLoader().load("Textures/2k_mars.jpg");
-const materialMars = new THREE.MeshBasicMaterial( {map: textureMars} );
-mars = new THREE.Mesh( geometryMars, materialMars );
-mars.position.z = realSunR + 228000;
-scene.add( mars );
-
 
 const marsOrbit = new THREE.EllipseCurve(
 	0,  0,            // ax, aY
@@ -214,7 +229,8 @@ camera.position.y = -10000;
 controls = new OrbitControls(camera, renderer.domElement);
 controls.enablePan = false;
 controls.enableDamping = true;
-controls.dampingFactor = 0.05;
+controls.dampingFactor = 0.1;
+controls.zoomSpeed = 1;
 
 }
 
@@ -236,8 +252,8 @@ function animate(){
    
     //this controls the orbital movement of mercury
     angleM += 0.00001 * timeMultiplier;
-    mercury.position.z = 696.340 + 70000.000 * (Math.sin(angleM)) - 10000;
-    mercury.position.x = 696.340 + 47000.000 * (Math.cos(angleM));
+    mercury.position.z = 696.340 + 60000.000 * (Math.sin(angleM)) - 10000;
+    mercury.position.x = 696.340 + 60000.000 * (Math.cos(angleM));
     mercury.updateMatrix();
 
     //this controls the orbital movement of Venus
@@ -279,55 +295,61 @@ export function topDown(){
     camera.lookAt(0,0,0);
 }
 
+//Function to use for viewing the planets
+function view(object){
+    let offset;
+    if(!realsize){
+        offset = 10000;
+    }else{
+        offset = 50;
+    }
+
+    camera.position.x = object.position.x ;
+    camera.position.y = object.position.y ;
+    camera.position.z = object.position.z + offset ;
+    controls.target = object.position;
+    camera.lookAt(object);
+}
 
 //View Sun Button
-
 let viewSun = document.getElementById('viewSunButton');
 viewSun.addEventListener("click", function()
 {   
-    camera.position.x = sun.position.x ;
-    camera.position.y = sun.position.y ;
-    camera.position.z = sun.position.z + 15000 ;
-    controls.target = sun.position;
-    camera.lookAt(sun);
-    
+    view(sun);
 });
 
 //view earth button
 let viewEarth = document.getElementById('viewEarthButton');
 viewEarth.addEventListener("click", function()
 {   
-    camera.position.x = earth.position.x ;
-    camera.position.y = earth.position.y ;
-    camera.position.z = earth.position.z + 5000 ;
-    controls.target = earth.position;
-    camera.lookAt(earth);
+    view(earth);
+});
+
+let viewMoon = document.getElementById('viewMoonButton');
+viewMoon.addEventListener("click", function()
+{   
+  console.log("WIP")
     
 });
 
 let viewMercury = document.getElementById('viewMercuryButton');
 viewMercury.addEventListener("click", function()
 {   
-
-    camera.position.x = mercury.position.x;
-    camera.position.y = mercury.position.y;
-    camera.position.z = mercury.position.z + 5000;
-    controls.target = mercury.position;
-    camera.lookAt(mercury);
- 
+    view(mercury);
 });
 
 let viewVenus = document.getElementById('viewVenusButton');
 viewVenus.addEventListener("click", function()
 {   
-
-    camera.position.x = venus.position.x;
-    camera.position.y = venus.position.y;
-    camera.position.z = venus.position.z + 5000;
-    controls.target = venus.position;
-    camera.lookAt(venus);
-  
+    view(venus);
 });
+
+let viewMars = document.getElementById('viewMarsButton');
+viewMars.addEventListener("click", function()
+{   
+    view(mars);
+});
+
 
 
 //function  to set planets to their real, to scale sizes.
@@ -363,8 +385,9 @@ document.addEventListener('DOMContentLoaded', function () {
         setRealSizes(mercury);
         setRealSizes(venus);
         setRealSizes(earth);
+        setRealSizes(mars);
         //BUG: the Moon's orbit line should not change when 'real sizes' is toggled.
-        //setRealSizes(moon);
+        // setRealSizes(moon);
 
       } else {
         sun.scale.x = 1;
@@ -376,9 +399,12 @@ document.addEventListener('DOMContentLoaded', function () {
         setDisplaySizes(venus);
         setDisplaySizes(earth);
         setDisplaySizes(moon);
+        setDisplaySizes(mars);
 
 
       }
+      //Flip realsize bool depending on switch
+      realsize = !realsize;
     });
   });
 
