@@ -24,6 +24,7 @@ let realSunR = 696.340;
 let displaySunR = 6963.40
 let displayMarsR = 338.95;
 let phobosR = 11.267 / 100;
+let deimosR = 6.200 / 100;
 
 let earthR, moonR, mercuryR, venusR, sunR;
 
@@ -131,9 +132,10 @@ earth = earthClass.mesh;
 const marsClass = new CelestialObject(displayMarsR, realSunR + 228000, "Textures/2k_mars.jpg");
 marsClass.buildMesh();
 //Phobos orbits so close to mars (6000KM) that a display radius is needed
-marsClass.addChild(phobosR*100, displayMarsR + 600, "Textures/Phobos.jpg", "moon")
+//TODO : Add this display radius
+marsClass.addChild(phobosR*100, displayMarsR + 60.0, "Textures/Phobos.jpg", "moon")
+marsClass.addChild(deimosR*100, displayMarsR + 234.58, "Textures/Deimos.jpg", "moon")
 mars = marsClass.mesh;
-//TODO - add deimos
 
 const earthOrbit = new THREE.EllipseCurve(
 	0,  0,            // ax, aY
