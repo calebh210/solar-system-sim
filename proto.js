@@ -114,7 +114,7 @@ scene.add( skybox );
 
 //the sun
 const sunClass = new CelestialObject(6963.40,0,"Textures/2k_sun.jpg");
-// sunClass.buildMesh(true);
+sunClass.buildMesh(true);
 sun = sunClass.mesh;
 
 //mercury - 2440KM radius
