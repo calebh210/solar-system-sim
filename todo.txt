@@ -1,7 +1,0 @@
-Add rest of planets + some moons
-Add planet orbits
-Make the "Real Size" slider work
-Add ability to jump camera to any planet
-Give planet own orbital period
-Add ability to speed up time
-Unjank camera controls
