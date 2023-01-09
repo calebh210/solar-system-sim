@@ -7,8 +7,9 @@ import { GLTFLoader } from 'https://unpkg.com/three@0.127.0/examples/jsm/loaders
 //All textures are 2k, 8k options are available, but increase load times
 //3D models taken from https://solarsystem.nasa.gov/resources
 let scene, camera, renderer, earth, moon, sun, controls, mercury, venus, mars;
+let phobos, deimos;
 let realsize = false;
-
+let light;
 //DEFINING ASTRONOMICAL SIZES
 //All sizes are in KM and /100 from actual size (but remain constant so should be realistic model)
 let AU = 150000.000;
@@ -31,7 +32,7 @@ let earthR, moonR, mercuryR, venusR, sunR;
 //Class to create the geometry for all celestial objects (stars, moons, suns)
 class CelestialObject{
 
-    constructor(radius, orbit, texture){
+    constructor(radius, orbit, texture, type){
         this.radius = radius;
         this.orbit = orbit;
         this.texture = texture;
@@ -44,10 +45,15 @@ class CelestialObject{
         // this.gravity = gravity;
     }  
     
-    buildMesh(){
+    buildMesh(isSun){
         const geometry = new THREE.SphereGeometry( this.radius, 128, 64 );
         const texture = new THREE.TextureLoader().load(this.texture);
-        const material = new THREE.MeshBasicMaterial( {map: texture} );
+        let material;
+        if(isSun){
+            material = new THREE.MeshBasicMaterial( {map: texture} );
+        }else{
+            material = new THREE.MeshLambertMaterial( {map: texture} );
+        }
         this.mesh = new THREE.Mesh( geometry, material);
         scene.add(this.mesh);
         this.mesh.position.z = this.orbit;
@@ -57,10 +63,13 @@ class CelestialObject{
     addChild(childRadius, childOrbit, childTexture, type){
         const childGeometry = new THREE.SphereGeometry( childRadius, 128, 64 );
         const childTextureLoaded = new THREE.TextureLoader().load(childTexture);
-        const childMaterial = new THREE.MeshBasicMaterial( {map: childTextureLoaded} );
+        const childMaterial = new THREE.MeshLambertMaterial( {map: childTextureLoaded} );
         if(type == "atmo"){
             childMaterial.transparent = true;
             childMaterial.opacity = 0.7;
+
+        }else if(type == "moon"){
+            
         }
         let childObject = new THREE.Mesh( childGeometry, childMaterial);
         childObject.position.z = childOrbit;
@@ -105,22 +114,22 @@ scene.add( skybox );
 
 //the sun
 const sunClass = new CelestialObject(6963.40,0,"Textures/2k_sun.jpg");
-sunClass.buildMesh();
+// sunClass.buildMesh(true);
 sun = sunClass.mesh;
 
 //mercury - 2440KM radius
 const mercuryClass = new CelestialObject(mercuryR, realSunR + 47000.000, "Textures/2k_mercury.jpg");
-mercuryClass.buildMesh();
+mercuryClass.buildMesh(false);
 mercury = mercuryClass.mesh;
 
 //venus - 6051.8KM radius
 const venusClass = new CelestialObject(venusR, realSunR + 108940.000, "Textures/2k_venus_surface.jpg");
-venusClass.buildMesh();
+venusClass.buildMesh(false);
 venus = venusClass.mesh;
 
 //the earth
 const earthClass = new CelestialObject(earthR,realSunR + AU,"Textures/2k_earth_daymap.jpg");
-earthClass.buildMesh();
+earthClass.buildMesh(false);
 //mesh must be build before adding children
 //this is to add clouds above Earth, looks pretty but increases load time
 earthClass.addChild(earthR+35,0,"Textures/2k_earth_clouds.jpg","atmo");
@@ -130,11 +139,11 @@ earth = earthClass.mesh;
 
 //mars 
 const marsClass = new CelestialObject(displayMarsR, realSunR + 228000, "Textures/2k_mars.jpg");
-marsClass.buildMesh();
+marsClass.buildMesh(false);
 //Phobos orbits so close to mars (6000KM) that a display radius is needed
 //TODO : Add this display radius
-marsClass.addChild(phobosR*100, displayMarsR + 60.0, "Textures/Phobos.jpg", "moon")
-marsClass.addChild(deimosR*100, displayMarsR + 234.58, "Textures/Deimos.jpg", "moon")
+phobos = marsClass.addChild(phobosR*100, displayMarsR + 60.0, "Textures/Phobos.jpg", "moon")
+deimos = marsClass.addChild(deimosR*100, displayMarsR + 234.58, "Textures/Deimos.jpg", "moon")
 mars = marsClass.mesh;
 
 const earthOrbit = new THREE.EllipseCurve(
@@ -220,6 +229,17 @@ const marsOrbitLine = new THREE.Line( MarsOrbitGeometry, orbmaterial );
 scene.add( marsOrbitLine );
 marsOrbitLine.rotation.x += Math.PI / 2;
 
+//This is the light coming from the sun
+const color = 0xFFFFFF;
+const intensity = 1;
+light = new THREE.PointLight(color, intensity, 0);
+light.position.set(0, 10, 0);
+scene.add(light);
+
+
+//a very subtle ambient light for aesthetic reasons
+const ambientlight = new THREE.AmbientLight( 0x404040, 0.15 ); 
+scene.add( ambientlight );
 
 //camera 
 camera.position.z = 450000;
@@ -248,9 +268,10 @@ function animate(){
     requestAnimationFrame(animate);
 
     //Change the rotation speed of the earth
-    earth.rotation.y += 0.0005;
+    earth.rotation.y += 0.005;
     //set Moon's rotation
     moon.rotation.y += 0.001;
+    mars.rotation.y += 0.001;
    
     //this controls the orbital movement of mercury
     angleM += 0.00001 * timeMultiplier;
