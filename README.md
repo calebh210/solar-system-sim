@@ -5,4 +5,4 @@ The simulator will have the capability to view all the current planets, fly arou
 and add/remove masses from the system to view how it changes the gravity.
 
 NOTE: this project was moved to https://github.com/calebh210/solar-system-sim for developement, however it will still be hosted at:
-https://www.calebharmon.net/simulator
+https://www.calebharmon.net/simulator upon its completion
