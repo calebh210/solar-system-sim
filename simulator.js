@@ -5,7 +5,7 @@ import { GLTFLoader } from 'https://unpkg.com/three@0.127.0/examples/jsm/loaders
 // Textures taken from https://www.solarsystemscope.com/textures/
 //All textures are 2k, 8k options are available, but increase load times
 //3D models taken from https://solarsystem.nasa.gov/resources
-let scene, camera, renderer, earth, moon, sun, controls, mercury, venus, mars, jupiter;
+let scene, camera, renderer, earth, moon, sun, controls, mercury, venus, mars, jupiter, saturn, uranus, neptune;
 let phobos, deimos;
 let realsize = false;
 let light;
@@ -21,24 +21,12 @@ let marsR = 3389.5 / 100;
 let phobosR = 11.267 / 100;
 let deimosR = 6.200 / 100;
 let jupiterR = 69911 / 100;
-
-
-// let realMercuryR = 24.40;
-// let displayMercuryR = 244.0;
-// let realVenusR = 6.0518;
-// let displayVenusR = 605.18;
-// let realMoonR = 1.737;
-// let displayMoonR = 173.70;
-// let realEarthR = 6.371;
-// let displayEarthR = 637.100;
-// let realSunR = 6963.40;
-// let displaySunR = 69634.0;
-// let displayMarsR = 338.95;
-// let phobosR = 11.267 / 100;
-// let deimosR = 6.200 / 100;
-// let jupiterR = 69911 / 100;
-
-
+let saturnR = 58232 / 100;
+let saturnOrbitRadius = 1427000000 / 100;
+let uranusR = 25362 / 100;
+let uranusOrbitRadius = 2900000000 / 100;
+let neptuneR = 24622 / 100;
+let neptuneOrbitRadius = 4500000000 / 100;
 
 //Class to create the geometry for all celestial objects (stars, moons, suns)
 class CelestialObject{
@@ -102,7 +90,7 @@ camera = new THREE.PerspectiveCamera(
     75, 
     window.innerWidth / window.innerHeight,
     0.1,
-    10000000
+    50000000
 );
 
 //creating the renderer
@@ -112,8 +100,8 @@ document.body.appendChild(renderer.domElement);
 
 //This is the code for the skybox
 //Whats happening is that the scene is inside a giant sphere, which allows you to pan with the background
-const sky = new THREE.SphereGeometry(20000000,64,32);
-const backgroundTexture = new THREE.TextureLoader().load("Textures/2k_background.jpg");
+const sky = new THREE.SphereGeometry(300000000,64,32);
+const backgroundTexture = new THREE.TextureLoader().load("Textures/8k_background.jpg");
 const skyMat = new THREE.MeshBasicMaterial({map: backgroundTexture, side: THREE.BackSide });
 const skybox = new THREE.Mesh( sky, skyMat);
 scene.add( skybox );
@@ -140,7 +128,7 @@ earthClass.buildMesh(false);
 //this is to add clouds above Earth, looks pretty but increases load time
 earthClass.addChild(earthR+3,0,"Textures/2k_earth_clouds.jpg","atmo");
 //the moon
-moon = earthClass.addChild(moonR, earthR + (407000 / 100), "Textures/2k_moon.jpg", "moon")
+moon = earthClass.addChild(moonR, earthR + (384400 / 100), "Textures/2k_moon.jpg", "moon")
 earth = earthClass.mesh;
 
 //mars 
@@ -152,9 +140,30 @@ phobos = marsClass.addChild(phobosR, marsR + (6000 / 100), "Textures/Phobos.jpg"
 deimos = marsClass.addChild(deimosR, marsR + (23458 / 100), "Textures/Deimos.jpg", "moon")
 mars = marsClass.mesh;
 
-const jupiterClass = new CelestialObject(jupiterR,sunR + (484000000 / 100), "Textures/2k_jupiter.jpg");
+const jupiterClass = new CelestialObject(jupiterR,sunR + (778000000 / 100), "Textures/2k_jupiter.jpg");
 jupiterClass.buildMesh();
 jupiter = jupiterClass.mesh;
+
+const saturnClass = new CelestialObject(saturnR, sunR + saturnOrbitRadius, "Textures/2k_saturn.jpg" )
+saturnClass.buildMesh();
+saturn = saturnClass.mesh;
+
+//These ring sizes are rough estimates
+//TODO: Fix the ring texture
+const saturnRing = new THREE.RingGeometry( saturnR + 30000/100, saturnR + 75000/100, 128 );
+const ringTexure = new THREE.TextureLoader().load("Textures/2k_saturn_ring.png");
+const ringMaterial = new THREE.MeshBasicMaterial( { map: ringTexure, side: THREE.DoubleSide } );
+const ring = new THREE.Mesh( saturnRing, ringMaterial );
+ring.rotation.x = Math.PI / 2;
+saturn.add( ring );
+
+const uranusClass = new CelestialObject(uranusR, sunR + uranusOrbitRadius, "Textures/2k_uranus.jpg");
+uranusClass.buildMesh();
+uranus = uranusClass.mesh;
+
+const neptuneClass = new CelestialObject(neptuneR, sunR + neptuneOrbitRadius, "Textures/2k_neptune.jpg");
+neptuneClass.buildMesh();
+neptune = neptuneClass.mesh;
 
 
 
@@ -183,7 +192,7 @@ earthOrbitLine.rotation.x = Math.PI / 2;
 
 const moonOrbit = new THREE.EllipseCurve(
 	0,  0,            // ax, aY
-	earthR + (407000 / 100), earthR + (407000 / 100),           // xRadius, yRadius
+	earthR + (384400 / 100), earthR + (384400 / 100),           // xRadius, yRadius
 	0,  2 * Math.PI,  // aStartAngle, aEndAngle
 	false,            // aClockwise
 	0                 // aRotation
@@ -241,6 +250,64 @@ const marsOrbitLine = new THREE.Line( MarsOrbitGeometry, orbmaterial );
 scene.add( marsOrbitLine );
 marsOrbitLine.rotation.x += Math.PI / 2;
 
+
+const jupiterOrbit = new THREE.EllipseCurve(
+	0,  0,            // ax, aY
+	sunR + (778000000 / 100), sunR + (778000000 / 100),           // xRadius, yRadius
+	0,  2 * Math.PI,  // aStartAngle, aEndAngle
+	false,            // aClockwise
+	0                 // aRotation
+);
+
+const jupiterPoints = jupiterOrbit.getPoints( 2000 );
+const jupiterOrbitGeometry = new THREE.BufferGeometry().setFromPoints( jupiterPoints );
+const jupiterOrbitLine = new THREE.Line( jupiterOrbitGeometry, orbmaterial );
+scene.add( jupiterOrbitLine );
+jupiterOrbitLine.rotation.x += Math.PI / 2;
+
+const saturnOrbit = new THREE.EllipseCurve(
+	0,  0,            // ax, aY
+	sunR + saturnOrbitRadius, sunR + saturnOrbitRadius,           // xRadius, yRadius
+	0,  2 * Math.PI,  // aStartAngle, aEndAngle
+	false,            // aClockwise
+	0                 // aRotation
+);
+
+const saturnPoints = saturnOrbit.getPoints( 2000 );
+const saturnOrbitGeometry = new THREE.BufferGeometry().setFromPoints( saturnPoints );
+const saturnOrbitLine = new THREE.Line( saturnOrbitGeometry, orbmaterial );
+scene.add( saturnOrbitLine );
+saturnOrbitLine.rotation.x += Math.PI / 2;
+
+const uranusOrbit = new THREE.EllipseCurve(
+	0,  0,            // ax, aY
+	sunR + uranusOrbitRadius, sunR + uranusOrbitRadius,           // xRadius, yRadius
+	0,  2 * Math.PI,  // aStartAngle, aEndAngle
+	false,            // aClockwise
+	0                 // aRotation
+);
+
+const uranusPoints = uranusOrbit.getPoints( 2000 );
+const uranusOrbitGeometry = new THREE.BufferGeometry().setFromPoints( uranusPoints );
+const uranusOrbitLine = new THREE.Line( uranusOrbitGeometry, orbmaterial );
+scene.add( uranusOrbitLine );
+uranusOrbitLine.rotation.x += Math.PI / 2;
+
+const neptuneOrbit = new THREE.EllipseCurve(
+	0,  0,            // ax, aY
+	sunR + neptuneOrbitRadius, sunR + neptuneOrbitRadius,           // xRadius, yRadius
+	0,  2 * Math.PI,  // aStartAngle, aEndAngle
+	false,            // aClockwise
+	0                 // aRotation
+);
+
+const neptunePoints = neptuneOrbit.getPoints( 2000 );
+const neptuneOrbitGeometry = new THREE.BufferGeometry().setFromPoints( neptunePoints );
+const neptuneOrbitLine = new THREE.Line( neptuneOrbitGeometry, orbmaterial );
+scene.add( neptuneOrbitLine );
+neptuneOrbitLine.rotation.x += Math.PI / 2;
+
+
 //This is the light coming from the sun
 const color = 0xFFFFFF;
 const intensity = 1;
@@ -254,9 +321,9 @@ const ambientlight = new THREE.AmbientLight( 0x404040, 0.15 );
 scene.add( ambientlight );
 
 //camera 
-camera.position.z = 450000;
-camera.position.x = -2000;
-camera.position.y = -10000;
+camera.position.x = 4000000;
+camera.position.y = 3000000;
+camera.position.z = 3750000;
 //takes x,y,z args, points camera at that location
 //camera.lookAt(sun.position);
 
@@ -279,11 +346,16 @@ function animate(){
 
     requestAnimationFrame(animate);
 
-    //Change the rotation speed of the earth
+    console.log(camera.position);
+    //Change the rotation speed of the planets
     earth.rotation.y += 0.005;
     //set Moon's rotation
     moon.rotation.y += 0.001;
-    //mars.rotation.y += 0.001;
+    mars.rotation.y += 0.001;
+    jupiter.rotation.y += 0.0005;
+    saturn.rotation.y += 0.0005;
+    uranus.rotation.y += 0.0005;
+    neptune.rotation.y += 0.0005;
    
     //this controls the orbital movement of mercury
     angleM += 0.00001 * timeMultiplier;
@@ -303,7 +375,7 @@ function animate(){
     earth.position.x = sunR + AU * (Math.cos(angleE));
     earth.updateMatrix();
   
-    // angleMars += 0.00002 * timeMultiplier;
+    //angleMars += 0.00002 * timeMultiplier;
     mars.position.z = sunR + 2280000.00 * (Math.sin(angleMars));
     mars.position.x = sunR + 2280000.00 * (Math.cos(angleMars));
     mars.updateMatrix();
@@ -325,7 +397,7 @@ window.addEventListener('resize', onWindowResize, false);
 //View world from top-down perspective
 export function topDown(){
     camera.position.x = 0;
-    camera.position.y = 200000;
+    camera.position.y = 2000000;
     camera.position.z = 0;
     camera.lookAt(0,0,0);
 }
@@ -391,6 +463,23 @@ viewJupiter.addEventListener("click", function()
     view(jupiter);
 });
 
+let viewSaturn = document.getElementById('viewSaturnButton');
+viewSaturn.addEventListener("click", function()
+{   
+    view(saturn);
+});
+
+let viewUranus = document.getElementById('viewUranusButton');
+viewUranus.addEventListener("click", function()
+{   
+    view(uranus);
+});
+
+let viewNeptune = document.getElementById('viewNeptuneButton');
+viewNeptune.addEventListener("click", function()
+{   
+    view(neptune);
+});
 
 
 //function  to set planets to their real, to scale sizes.
